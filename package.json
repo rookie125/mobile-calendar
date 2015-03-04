@@ -1,0 +1,22 @@
+{
+  "name": "calendar",
+  "version": "0.1.0",
+  "description": "calendar",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "gulp": "^3.8.10",
+    "gulp-rev": "^2.0.1"
+  },
+  "devDependencies": {
+    "del": "^1.1.0",
+    "gulp-rename": "^1.2.0",
+    "gulp-uglify": "^1.0.2",
+    "gulp-uglifycss": "^1.0.4"
+  },
+  "scripts": {
+  },
+  "repository": {
+  },
+  "keywords": [],
+  "author": "rookie"
+}

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="yes" name="apple-touch-fullscreen"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0;" name="viewport"/>
+    <link rel="stylesheet" href="css/main.min.css">
+    <style>
+    .calendars {
+        padding: 4px 8px;
+        border: 1px solid #999;
+        border-radius: 2px;
+    }
+    </style>
+    <title>calendar</title>
+</head>
+
+<body>
+
+不可选择过期日期：<br>
+<input type="text" class="calendars" start="2000" end="2020" format="yy/mm/dd" past>
+<br>
+<br>
+可以任意选择日期：<br>
+<input type="text" class="calendars" start="2000" end="2024">
+
+
+<script src="script/main.min.js"></script>
+</body>
+</html>
