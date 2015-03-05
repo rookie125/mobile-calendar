@@ -353,7 +353,7 @@
                 if(n == tDay){
                     oNum.className = oNum.className + ' today';
                 } else if(n < tDay){
-                    oNum.className = oNum.className + ' expire pasted';
+                    oNum.className = oNum.className + ' expire';
                 }
             }
             else if((past && data.m < 0 && data.y <= 0)){
@@ -370,6 +370,7 @@
             if(setShiled(tYear, tMonth, n)){
                 toolClass(oNum, 'expire');
                 toolClass(oNum, 'pasted');
+                toolClass(oNum, 'shield');
             }
 
             oSpan.appendChild(oNum);
@@ -638,7 +639,7 @@
      * 创建头部
      * @return {[type]}      [description]
      */
-     Calendar.prototype.createWeek = function(){
+    Calendar.prototype.createWeek = function(){
          var week = create('div', {"class" : 'calen-week'}),
              weeks = '日一二三四五六';
 
@@ -692,7 +693,7 @@
                 else if(toolClass(this, 'next-to-month', 'has')){
                     _this.switchDate(1);
                 }
-                else if(!toolClass(this, 'pasted', 'has') || !past){
+                else if(!toolClass(this, 'pasted', 'has') && !past){
                     var date = this.getAttribute('data-calen'), today = this.innerHTML;
                         date = format(date, (_this.focusObj.getAttribute('format') || false));
 
@@ -717,18 +718,18 @@
      */
     Calendar.prototype.switchDate = function(dir, type){
         var _this = this;
-
+        console.log(mNow, yNow)
         type = type || 'month';
 
         switch(type){
             case 'month':
-                if(dir > 0){
-                    mNow++;
-                    _this.transitions(calendarList, -1);
-                } else {
-                    mNow--;
-                    _this.transitions(calendarList, 1);
-                }
+                dir > 0 ? mNow++ : mNow-- ;
+
+                _this.startJSON.prev.m = mNow - 1;
+                _this.startJSON.now.m = mNow;
+                _this.startJSON.next.m = mNow + 1;
+
+                _this.transitions(calendarList, dir > 0 ? -1 :1);
                 break;
             case 'year':
                 _this.appendList({
@@ -741,17 +742,10 @@
                         y : yNow + 1
                     }
                 }, function(){
-                    if(dir > 0){
-                        yNow++;
-                        _this.transitions(calendarList, -1);
-                    } else {
-                        yNow--;
-                        _this.transitions(calendarList, 1);
-                    }
+                    dir > 0 ? yNow++ : yNow-- ;
+                    _this.startJSON.now.y = yNow;
+                    _this.transitions(calendarList, dir > 0 ? -1 : 1);
                 });
-
-
-
                 break;
         }
     }
@@ -778,7 +772,6 @@
         }, 500)
 
         function end(){
-            console.log(_this.startJSON)
             _this.appendList(_this.startJSON, function(){
                 toolClass(obj, 'silde', 'remove');
                 toolClass(obj, 'prev-to', 'remove');
@@ -906,8 +899,8 @@
     }
     
     /**
-    * 隐藏日历
-    **/
+     * 隐藏日历
+     */
 	function hideCalen(){
 		toolClass(oCalenWrap, 'close');
         setTimeout(function(){
@@ -916,7 +909,12 @@
         }, 290)
 	}
     
-    // 日历的格式
+    /**
+     * 日历的格式
+     * @param  {[type]} str  [description]
+     * @param  {[type]} fmat [description]
+     * @return {[type]}      [description]
+     */
     function format(str, fmat){
         if(!str)return false;
         str = str.split('/');
@@ -949,7 +947,11 @@
         return result;
     }
 
-    // 字符串获取年月日
+    /**
+     * / 字符串获取年月日
+     * @param  {[type]} str [description]
+     * @param  {[type]} one [description]
+     */
     function getDate(str, one){
         str = str.replace(/[\'\s]+/g, '');
         if(!str)return;
