@@ -186,7 +186,8 @@ html { font-size: 12px; }
     color: #fff;
 }
 .calen-months,
-.calen-years {
+.calen-years,
+.calen-time {
 	display: none;
     position: absolute;
     bottom: 0;
@@ -199,11 +200,13 @@ html { font-size: 12px; }
     z-index: 8;
 }
 .calen-months.active,
-.calen-years.active {
+.calen-years.active,
+.calen-time.active {
     display: block;
 }
 .calen-months span,
-.calen-years span {
+.calen-years span,
+.calen-time span {
     float: left;
     width: 33.3333%;
     padding: 11px 0;
@@ -212,8 +215,14 @@ html { font-size: 12px; }
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
+.calen-time span {
+    width: 25%;
+    padding: 5px 0;
+    height: 35px;
+}
 .calen-months a,
-.calen-years a {
+.calen-years a,
+.calen-time a {
     display: inline-block;
     width: 80%;
     font-size: 1.4rem;
@@ -222,8 +231,13 @@ html { font-size: 12px; }
     letter-spacing: 2px;
     border-radius: 4px;
 }
+.calen-time a {
+    line-height: 25px;
+    font-size: 1.2rem;
+}
 .calen-months a:active,
-.calen-years a:active {
+.calen-years a:active,
+.calen-time a:active {
     background-color: #26a1a4;
     color: #fff;
 }
@@ -231,6 +245,12 @@ html { font-size: 12px; }
 .calen-years a.active {
     background-color: #39b5b8;
     color: #fff;
+}
+.calen-time .expire.pasted {
+    color: #ccc;
+}
+.calen-time .expire.pasted:active {
+    background: none;
 }
 .calen-years.active {
     display: -webkit-box;

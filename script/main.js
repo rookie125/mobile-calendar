@@ -22,7 +22,14 @@
         selectMonthBox; // 月份选择
 
     function Calendar(){
+        var oDate = new Date();
         this.focusObj = null;
+        this.shield = '[]';
+        this.fixDate = {y : oDate.getFullYear(), m : oDate.getMonth() + 1, d : oDate.getDate()};
+        this.startDate = '';
+        this.startJSON = {};
+        this.hours = false;
+        this.hoursPast = false;
 
         // 开始初始化
         this.init();
@@ -52,6 +59,10 @@
             // 滑动切换上下月
             sildeSwitch(calendarList, function(obj, dir){
                 dir > 0 ? mNow-- : mNow++;
+
+                _this.startJSON.prev.m = mNow - 1;
+                _this.startJSON.now.m = mNow;
+                _this.startJSON.next.m = mNow + 1;
 
                 _this.transitions(obj, dir);
             })
@@ -142,13 +153,48 @@
                 var start = Number(this.getAttribute('start')) || 1915,
                     end = Number(this.getAttribute('end')) || 2020;
                     past = !(this.getAttribute('past') == null);
-                
+                _this.hours = !(this.getAttribute('hours') == null);
+                _this.hoursPast = !(this.getAttribute('hours-past') == null);
+
+                _this.shield = getDate(this.getAttribute('shield') || '');
+                _this.startDate = getDate(this.getAttribute('start-date') || '');
+                var prev,now,next, oDate = new Date();
+
+                if(_this.startDate instanceof Array && _this.startDate.length){
+                    var startDate = _this.startDate[0];
+
+                    yNow = startDate.y - oDate.getFullYear();
+                    mNow = startDate.m - (oDate.getMonth() + 1);
+
+                    _this.fixDate.y = startDate.y;
+                    _this.fixDate.m = startDate.m;
+                    _this.fixDate.d = startDate.d;
+
+                    prev = { y : yNow, m : mNow - 1 },
+                    now = { y : yNow, m : mNow, d : startDate.d },
+                    next = { y : yNow, m : mNow + 1 };
+
+                    _this.startJSON = {"prev" : prev, "now" : now, "next" : next};
+                }
+                else {
+                    _this.fixDate.y = oDate.getFullYear();
+                    _this.fixDate.m = oDate.getMonth();
+                    _this.fixDate.d = oDate.getDate()
+                }
+
                 if(_this.focusObj != this){
-                    mNow = 0;
-                    yNow = 0;
+
+                    if(!_this.startDate instanceof Array || !_this.startDate){
+                        mNow = 0 ;
+                        yNow = 0;
+
+                        _this.startJSON.prev = { y : yNow, m : mNow - 1 };
+                        _this.startJSON.now = { y : yNow, m : mNow };
+                        _this.startJSON.next = { y : yNow, m : mNow + 1 };
+                    }
                     
                     // 创建日历对象列表
-                    _this.appendList({}, function(){
+                    _this.appendList(_this.startJSON, function(){
                         _this.addEvent();
                     });
                     
@@ -222,11 +268,13 @@
      */
     Calendar.prototype.createCalenList = function(data, setTitle){
         var oList = document.createElement('div'),
-            created = 0;
+            created = 0,
+            _this = this;
 
         data = data || {};
         data.m = data.m || 0;
         data.y = data.y || 0;
+        var date = new Date();
 
         //
         var date = new Date(),
@@ -234,7 +282,6 @@
 
             date.setFullYear(date.getFullYear() + data.y, (date.getMonth() + data.m + 1), 1, 0, 0, 0);
             date.setDate(0);
-
 
         var dSun = date.getDate();
 
@@ -274,7 +321,7 @@
                     "href" : 'javascript:;'
                 }, lastMonths[i]);
 
-            if(lastMonths[i] ==tDay && data.m == 1 && !data.y)toolClass(oNum, 'today');
+            if(lastMonths[i] == tDay && data.m == 1 && !data.y)toolClass(oNum, 'today');
 
             oSpan.appendChild(oNum);
 
@@ -309,8 +356,20 @@
                     oNum.className = oNum.className + ' expire pasted';
                 }
             }
-            else if(past && data.m < 0 && data.y <= 0){
+            else if((past && data.m < 0 && data.y <= 0)){
                 oNum.className = ' expire pasted';
+            }
+
+            // 设置是否小于用户定义的开始日期
+            if(tYear <= _this.fixDate.y && tMonth <= _this.fixDate.m && n < data.d || tYear <= _this.fixDate.y && tMonth < _this.fixDate.m){
+                toolClass(oNum, 'expire');
+                toolClass(oNum, 'pasted');
+            }
+
+            // 设置禁用日期
+            if(setShiled(tYear, tMonth, n)){
+                toolClass(oNum, 'expire');
+                toolClass(oNum, 'pasted');
             }
 
             oSpan.appendChild(oNum);
@@ -333,6 +392,20 @@
 
             oSpan.appendChild(oNum);
             oList.appendChild(oSpan);
+        }
+
+        // 设置禁用日期
+        function setShiled(iyear, imonth, idate){
+            if(!_this.shield)return false;
+
+            for(var k = 0 ; k < _this.shield.length ; k++){
+                _this.shield[k].y = _this.shield[k].y || data.getFullYear();
+                _this.shield[k].m = _this.shield[k].m || data.getMonth() + 1;
+                _this.shield[k].d = _this.shield[k].d || data.getDate();
+
+                if(iyear == _this.shield[k].y && imonth == _this.shield[k].m && idate == _this.shield[k].d)return true;
+            }
+            return false;
         }
 
         return oList;
@@ -424,6 +497,83 @@
     }
 
     /**
+     * 创建时间
+     * @return {[type]} [description]
+     */
+    Calendar.prototype.createTime = function(obj, date, today, past){
+        var oTime = getObj(oCalen, '.calen-time'),
+            child = [],
+            oDate = new Date(),
+            day = oDate.getDate(),
+            hours = oDate.getHours(),
+            _this = this;
+
+        if(!oTime.length){
+            oTime = create('div', {"class" : 'calen-time'});
+
+            for(var i = 0 ; i < 24 ; i++){
+
+                var time = i < 10 ? '0' + i : i ;
+                    time += ':00';
+
+                var oSpan = create('span'),
+                    oNum = create('a', {"href" : 'javascript:;', "data-time" : time}, time);
+
+                if(past && mNow < 0 && yNow <= 0){}
+
+                oSpan.appendChild(oNum);
+                oTime.appendChild(oSpan);
+                child.push({"obj" : oNum, "time" : parseInt(time, 10)});
+            }
+        }
+        else {
+            oTime = oTime[0];
+            var arr = getObj(oTime, 'a');
+
+            for(var i = 0 ; i < arr.length ; i++){
+                child.push({"obj" : arr[i], "time" : parseInt(arr[i].getAttribute('data-time'), 10)});
+            }
+        }
+
+        toolClass(oTime, 'active');
+
+        for(var i = 0 ; i < child.length ; i++){
+
+            if(_this.hoursPast && past && ((mNow < 0 && yNow <= 0) || (today == day &&  child[i].time <= hours))){
+                toolClass(child[i].obj, 'expire')
+                toolClass(child[i].obj, 'pasted');
+                child[i].obj.active = false;
+            }
+            else {
+                toolClass(child[i].obj, 'expire', 'remove');
+                toolClass(child[i].obj, 'pasted', 'remove');
+                child[i].obj.active = true;
+            }
+
+            (function(time){
+                child[i].obj.onclick = function(){
+
+                    // 设置日期时间
+                    if(this.active){
+                        var val = date + ' ' + (time < 10 ? '0' + time : time) + ':00';
+
+                        if(obj.value != null){
+                            obj.value = val;
+                        } else if(obj.innerHTML != null) {
+                            obj.innerHTML = val;
+                        }
+
+                        toolClass(oTime, 'active', 'remove');
+                        hideCalen();
+                    }
+                }
+            })(child[i].time);
+        }
+
+        oCalen.appendChild(oTime);
+    }
+
+    /**
      * 创建头部
      * @return {[type]}      [description]
      */
@@ -511,7 +661,7 @@
      * @param  {Function} cb [description]
      * @return {[type]}      [description]''
      */
-     Calendar.prototype.appendList = function(data, cb){
+    Calendar.prototype.appendList = function(data, cb){
         data = data || {};
         data.prev = data.prev || {m : mNow - 1, y : yNow};
         data.now = data.now || {m : mNow, y : yNow};
@@ -529,11 +679,11 @@
     /**
      * 设置日历事件
      */
-     Calendar.prototype.addEvent = function(){
-         var _this = this;
-         var aCalenSet = calendarList.getElementsByTagName('a');
+    Calendar.prototype.addEvent = function(){
+        var _this = this;
+        var aCalenSet = calendarList.getElementsByTagName('a');
 
-         for(var i = 0 ; i < aCalenSet.length ; i++){
+        for(var i = 0 ; i < aCalenSet.length ; i++){
             aCalenSet[i].onclick = function(){
 
                 if(toolClass(this, 'prev-to-month', 'has')){
@@ -543,9 +693,17 @@
                     _this.switchDate(1);
                 }
                 else if(!toolClass(this, 'pasted', 'has') || !past){
-                    var date = this.getAttribute('data-calen');
-                    _this.focusObj.value = format(date, (_this.focusObj.getAttribute('format') || false));
-                    hideCalen();
+                    var date = this.getAttribute('data-calen'), today = this.innerHTML;
+                        date = format(date, (_this.focusObj.getAttribute('format') || false));
+
+                    if(_this.hours){
+                        _this.createTime(_this.focusObj, date, today, past);
+                    }
+                    else {
+                        if(_this.focusObj.value != null)_this.focusObj.value = date;
+                        if(_this.focusObj.innerHTML != null)_this.focusObj.innerHTML = date;
+                        hideCalen();
+                    }
                 }
             }
         }
@@ -557,8 +715,8 @@
      * @param  {[type]} type [description]
      * @return {[type]}      [description]
      */
-     Calendar.prototype.switchDate = function(dir, type){
-         var _this = this;
+    Calendar.prototype.switchDate = function(dir, type){
+        var _this = this;
 
         type = type || 'month';
 
@@ -603,8 +761,8 @@
      * @param  {[type]} obj [description]
      * @param  {[type]} dir [上个月还是下个月]
      */
-     Calendar.prototype.transitions = function(obj, dir){
-         var _this = this;
+    Calendar.prototype.transitions = function(obj, dir){
+        var _this = this;
 
         if(dir > 0){
             toolClass(obj, 'silde');
@@ -620,10 +778,12 @@
         }, 500)
 
         function end(){
-            _this.appendList({}, function(){
+            console.log(_this.startJSON)
+            _this.appendList(_this.startJSON, function(){
                 toolClass(obj, 'silde', 'remove');
                 toolClass(obj, 'prev-to', 'remove');
                 toolClass(obj, 'next-to', 'remove');
+
                 _this.addEvent();
                 silde = false;
             })
@@ -635,7 +795,7 @@
      * @param  {[type]} ev [description]
      * @return {[type]}    [description]
      */
-     function sildeSwitch(obj, callBack){
+    function sildeSwitch(obj, callBack){
          obj.ontouchstart = start;
          obj.onmousedown = start;
 
@@ -756,6 +916,7 @@
         }, 290)
 	}
     
+    // 日历的格式
     function format(str, fmat){
         if(!str)return false;
         str = str.split('/');
@@ -786,6 +947,45 @@
         }
         
         return result;
+    }
+
+    // 字符串获取年月日
+    function getDate(str, one){
+        str = str.replace(/[\'\s]+/g, '');
+        if(!str)return;
+
+        str = str.match(/(\d+[\/\-]\d+[\/\-]\d+)/g);
+
+        var data = [];
+
+        for(var i = 0 ; i < str.length ; i++){
+            var arr = str[i].match(/\d+/g), result = {};
+
+            if(arr.length == 3){
+                result["m"] = arr[1];
+
+                if(arr[0].length == 4){
+                    result["y"] = arr[0];
+                    result["d"] = arr[2];
+                } else {
+                    result["d"] = arr[0];
+                    result["y"] = arr[2];
+                }
+            }
+            else if(arr.length == 2) {
+                if(arr[0].length == 4){
+                    result["y"] = arr[0];
+                    result["m"] = arr[1];
+                }
+                else if(arr[0].length <= 2){
+                    result["m"] = arr[0];
+                    result["d"] = arr[1];
+                }
+            }
+            data.push(result);
+        }
+
+        return data;
     }
 
     window.addEventListener('load', function(){
