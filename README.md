@@ -40,9 +40,9 @@
 
 	<input class="calendars" type="text" start="2008" />
 
-结束年份 **end="2015"**，默认为"2020"年
+结束年份 **end="2030"**，默认为"2020"年
 	
-	<input class="calendars" type="text" end="2008" />
+	<input class="calendars" type="text" end="2030" />
 
 
 是否可选过期日期 **past**, 设置该属性则不可选
