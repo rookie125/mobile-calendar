@@ -143,7 +143,11 @@
 
                     mNow += this.getAttribute('data-value') - monthTitle.getAttribute('data-value');
 
-                    _this.appendList({}, function(){
+                    _this.startJSON.prev.m = mNow - 1;
+                    _this.startJSON.now.m = mNow;
+                    _this.startJSON.next.m = mNow + 1;
+
+                    _this.appendList(_this.startJSON, function(){
                         _this.addEvent();
                     });
 
@@ -179,18 +183,18 @@
 
                     _this.fixDate.y = startDate.y;
                     _this.fixDate.m = startDate.m;
-                    _this.fixDate.d = startDate.d;
+                    _this.fixDate.d = startDate.d;                    
 
-                    prev = { y : yNow, m : mNow - 1 },
+                    prev = { y : yNow, m : mNow - 1, d : startDate.d },
                     now = { y : yNow, m : mNow, d : startDate.d },
-                    next = { y : yNow, m : mNow + 1 };
+                    next = { y : yNow, m : mNow + 1, d : startDate.d };
 
                     _this.startJSON = {"prev" : prev, "now" : now, "next" : next};
                 }
                 else {
                     _this.fixDate.y = oDate.getFullYear();
-                    _this.fixDate.m = oDate.getMonth();
-                    _this.fixDate.d = oDate.getDate()
+                    _this.fixDate.m = oDate.getMonth() + 1;
+                    _this.fixDate.d = oDate.getDate();
                 }
 
                 if(_this.focusObj != this){
@@ -220,7 +224,11 @@
 
                                 yNow += this.getAttribute('data-value') - yearTitle.getAttribute('data-value');
 
-                                _this.appendList({}, function(){
+                                _this.startJSON.prev.y = yNow;
+                                _this.startJSON.now.y = yNow;
+                                _this.startJSON.next.y = yNow;
+
+                                _this.appendList(_this.startJSON, function(){
                                     _this.addEvent();
                                 });
 
@@ -258,8 +266,6 @@
 
                 toolClass(oCalenWrap, 'active');
                 _this.focusObj = this;
-
-
 
                 this.blur();
                 return false;
@@ -332,7 +338,9 @@
                     "href" : 'javascript:;'
                 }, lastMonths[i]);
 
-            if(lastMonths[i] == tDay && data.m == 1 && !data.y)toolClass(oNum, 'today');
+            if(lastMonths[i] == tDay && data.m == 1 && !data.y && !data.d || !data.y && Number(_this.fixDate.m) + 1 == tMonth && _this.fixDate.d == lastMonths[i]){
+                toolClass(oNum, 'today');
+            }
 
             // 设置禁用日期
             if(setShiled(tYear, tMonth - 1, lastMonths[i])){
@@ -360,17 +368,20 @@
                 oNum = create('a', {
                     "data-calen" : (tYear + '/' + tMonth + '/' + n),
                     "href" : 'javascript:;'
-                }, n);
+                }, n),
+                oDate = new Date();
 
             if(created % 7 == 1 || created % 7 == 0){
                 oNum.className = 'weekend';
             }
 
-            if(!data.m && !data.y){
-                if(n == tDay){
+            if(!data.m && !data.y || !data.y && _this.fixDate.m == tMonth){
+
+                if(_this.fixDate.d == n || !_this.fixDate.d && n == tDay){
                     oNum.className = oNum.className + ' today';
-                } else if(n < tDay){
-                    oNum.className = oNum.className + ' expire';
+                }
+                else if(past && n < tDay){
+                    oNum.className = oNum.className + ' expire pasted';
                 }
             }
             else if((past && data.m < 0 && data.y <= 0)){
@@ -379,13 +390,14 @@
 
             // 设置是否小于用户定义的开始日期
             if(tYear <= _this.fixDate.y && tMonth <= _this.fixDate.m && n < data.d || tYear <= _this.fixDate.y && tMonth < _this.fixDate.m){
-                toolClass(oNum, 'expire');
-                toolClass(oNum, 'pasted');
+                if(_this.startDate){
+                    toolClass(oNum, 'expire');
+                    toolClass(oNum, 'pasted');
+                }
             }
 
             // 设置禁用日期
             if(setShiled(tYear, tMonth, n)){
-                // toolClass(oNum, 'expire');
                 toolClass(oNum, 'pasted');
                 toolClass(oNum, 'shield');
             }
@@ -406,7 +418,9 @@
                     "href" : 'javascript:;'
                     }, n);
 
-            if(n ==tDay && data.m == -1 && !data.y)toolClass(oNum, 'today');
+            if(n == tDay && data.m == -1 && !data.y && !data.d || !data.y && _this.fixDate.m - 1 == tMonth && _this.fixDate.d == n){
+                toolClass(oNum, 'today');
+            }
 
             // 设置禁用日期
             if(setShiled(tYear, tMonth + 1, n)){
@@ -715,7 +729,8 @@
                 else if(toolClass(this, 'next-to-month', 'has')){
                     _this.switchDate(1);
                 }
-                else if(!toolClass(this, 'pasted', 'has') && !past){
+                else if(!toolClass(this, 'pasted', 'has') && !toolClass(this, 'shield', 'has')){
+
                     var date = this.getAttribute('data-calen'), today = this.innerHTML;
                         date = format(date, (_this.focusObj.getAttribute('format') || false));
 
@@ -764,7 +779,9 @@
                     }
                 }, function(){
                     dir > 0 ? yNow++ : yNow-- ;
+                    _this.startJSON.prev.y = yNow;
                     _this.startJSON.now.y = yNow;
+                    _this.startJSON.next.y = yNow;
                     _this.transitions(calendarList, dir > 0 ? -1 : 1);
                 });
                 break;
@@ -789,6 +806,7 @@
         }
 
         setTimeout(function(){
+            console.log(_this.startJSON);
             end();
         }, 500)
 
