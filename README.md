@@ -36,39 +36,38 @@
 
 参数直接定义在标签上面
 
-定义可选的开始年份 <code>**start="2008"**</code>，默认为"1915"年
+定义年份列表中开始年份： <code>**start="2008"**</code>，默认开始为"1915"年
 
 	<input class="calendars" type="text" start="2008" />
 
-定义可选的结束年份 <code>**end="2030"**</code>，默认为"2020"年
+定义年份列表中结束年份： <code>**end="2030"**</code>，默认为"2020"年
 	
 	<input class="calendars" type="text" end="2030" />
 
-定义可选开始日期 <code>**startDate="2015/3/6"**</code>，定义后只能选 <code>**>= 2015/3/6**</code> 的日期
+定义可选的起始日期： <code>**start-date="2015/3/6"**</code>，默认为当前日期
 
-	<input class="calendars" type="text" startDate="2015/3/6" />
+	<input class="calendars" type="text" start-date="2015/3/6" />
 
-定义是否可选过期日期 <code>**past**</code>, 默认不定义则可选过期的日期
+定义是否不可选过期日期： <code>**past**</code>, 默认可选过期的日期
 	
 	<input class="calendars" type="text" past />
 
 
-定义是否可选时间 <code>**hours**</code>, 默认不可选时间
+定义是否可选时间： <code>**hours**</code>, 默认不可选时间
 	
 	<input class="calendars" type="text" hours />
 
-定义是否可选过期时间 <code>**hours-past**</code>，默认可选过期时间，定义该属性后则不可选过期时间   
-<span style="color: red;">*</span>该属性只有当你定义了<code>hours</code>属性才会生效
+定义是否不可选过期时间： <code>**hours-past**</code>，默认可选过期时间    
+* 该属性只有当你定义了<code>**hours**</code> 属性才会生效
 
 	<input class="calendars" type="text" hours hours-past />
 
-定义日期的显示格式 <code>**format**</code>, 默认为 <code>**"yy/mm/dd"**</code> , 暂时只支持 斜杠 <code>/</code> 和 横杠 <code>-</code> 作为分割符
-	
-<code> yy:年 </code> <code>mm:月</code> <code>dd:日</code>
+定义日期的显示格式： <code>**format**</code>, 默认为 <code>**"yy/mm/dd"**</code> , 暂时只支持 斜杠 <code>/</code> 和 横杠 <code>-</code> 作为分割符   
+* <code> yy:年</code> <code>mm:月</code> <code>dd:日</code>
 	 
 	<input class="calendars" type="text" format="yy-mm-dd" />
 
-定义指定禁用的日期属性 <code>**shield="[2015/3/8, 2015/3/9]"**</code> 这样将禁用<code>**2015-3-8/9**</code>这两天
+定义指定禁用的日期属性： <code>**shield="[2015/3/8, 2015/3/9]"**</code>
 	
 	<input class="calendars" type="text" shield="[2015/3/8, 2015/3/9]" />
 

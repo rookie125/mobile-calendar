@@ -540,7 +540,7 @@
 
         for(var i = 0 ; i < child.length ; i++){
 
-            if(_this.hoursPast && past && ((mNow < 0 && yNow <= 0) || (today == day &&  child[i].time <= hours))){
+            if(_this.hoursPast && ((mNow < 0 && yNow <= 0) || (today == day &&  child[i].time <= hours) || (mNow <= 0 && yNow <= 0 && today < day))){
                 toolClass(child[i].obj, 'expire')
                 toolClass(child[i].obj, 'pasted');
                 child[i].obj.active = false;
@@ -563,10 +563,9 @@
                         } else if(obj.innerHTML != null) {
                             obj.innerHTML = val;
                         }
-
-                        toolClass(oTime, 'active', 'remove');
                         hideCalen();
                     }
+                    toolClass(oTime, 'active', 'remove');
                 }
             })(child[i].time);
         }
