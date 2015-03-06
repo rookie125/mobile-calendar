@@ -5,29 +5,29 @@ var uglifycss = require('gulp-uglifycss');
 
 // 处理JS
 gulp.task('scripts', function() {
-    return gulp.src('script/main.js')
+    return gulp.src('src/calendar.js')
         .pipe(uglify())    //压缩
-        .pipe(rename('main.min.js'))
-        .pipe(gulp.dest('script/'));  //输出
+        .pipe(rename('calendar.min.js'))
+        .pipe(gulp.dest('src/'));  //输出
 });
 
 // 处理CSS
 gulp.task('csss', function() {
-    return gulp.src('css/style.css')
+    return gulp.src('src/calendar.css')
         .pipe(uglifycss())
-        .pipe(rename('main.min.css'))
-        .pipe(gulp.dest('css'));
+        .pipe(rename('calendar.min.css'))
+        .pipe(gulp.dest('src/'));
 });
 
 gulp.task('default', function() {
     gulp.run('scripts', 'csss');
 
     // 监听文件变化
-    gulp.watch('script/main.js', function(){
+    gulp.watch('src/calendar.js', function(){
         gulp.run('scripts');
     });
 
-    gulp.watch('css/style.css', function(){
+    gulp.watch('src/calendar.css', function(){
         gulp.run('csss');
     });
 });

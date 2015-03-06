@@ -5,27 +5,39 @@
 日历列表、年份选择支持左右滑动切换月份、年份。   
 
 选择列表  
-![选择列表](img/4.png '选择列表')
+![选择列表](images/4.png '选择列表')
 
 左右滑动切换    
-![左右滑动切换](img/4-1.png '左右滑动切换')
+![左右滑动切换](images/4-1.png '左右滑动切换')
 
 月份选择    
-![月份选择](img/1.png '月份选择')
+![月份选择](images/1.png '月份选择')
 
 年份选择    
-![年份选择](img/2.png '年份选择')
+![年份选择](images/2.png '年份选择')
 
 左右滑动切换年份列表    
-![左右滑动切换年份列表](img/2-1.png '左右滑动切换年份列表')
+![左右滑动切换年份列表](images/2-1.png '左右滑动切换年份列表')
 
 
 ## 使用方法
 
 引入该项目中的 CSS样式和JS文件
 
-	<link rel="stylesheet" href="css/main.min.css">
-	<script src="script/main.js"></script>
+	<link rel="stylesheet" href="src/calendar.min.css">
+
+引入JS文件方法有两种：  
+ 
+>方法一：模块化引入JS文件
+
+	<script src="xx/sea.js"></script>
+	<script>
+	    seajs.use('./src/calendar');
+	</script>
+
+>方法二：普通引入JS文件
+
+	<script src="src/calendar.js"></script>
 
 在<input /\>标签上定义class属性值为 "calendars"
 

@@ -6,12 +6,18 @@
     <meta content="yes" name="apple-mobile-web-app-capable"/>
     <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
     <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0;" name="viewport"/>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="src/calendar.css">
     <style>
     .calendars {
         padding: 4px 8px;
         border: 1px solid #999;
-        border-radius: 2px;
+        border-radius: 4px;
+    }
+    p {
+        padding: 0;
+        margin: 0;
+        font-size: 1.2rem;
+        line-height: 24px;
     }
     </style>
     <title>calendar</title>
@@ -19,14 +25,44 @@
 
 <body>
 
-不可选择过期日期：<br>
-<input type="text" id="calendars" class="calendars" start="2000" end="2020" format="yy/mm/dd" shield="['2015/3/8', '2015/4/2']" hours hours-past>
+<p>默认：</p>
+<input type="text" class="calendars" placeholder="选择日期"><br>
 <br>
+
+<p>不可选过期日期 past：</p>
+<input type="text" class="calendars" past placeholder="选择日期"><br>
 <br>
-可以任意选择日期：<br>
-<input type="text" class="calendars" start="2000" end="2024">
+
+<p>可选择时间同时可选过去时间 hours：</p>
+<input type="text" class="calendars" hours placeholder="选择日期时间"><br>
+<br>
+
+<p>可选择时间但不可选过去的时间 hours、hours-past：</p>
+<input type="text" class="calendars" hours hours-past placeholder="选择日期时间"><br>
+<br>
+
+<p>指定可选起始日期 start-date：</p>
+<p>start-date="2015/5/6"</p>
+<input type="text" class="calendars" start-date="2015/5/6" placeholder="选择日期"><br>
+<br>
+
+<p>指定禁用日期 shield：</p>
+<p>shield="['2015/3/10', '2015/4/10', '2015/4/20']"</p>
+<input type="text" class="calendars" shield="['2015/3/10', '2015/4/10', '2015/4/20']" placeholder="选择日期"><br>
+<br>
+
+<p>定义日期的显示格式 format：</p>
+<p>format="dd/mm/yy"</p>
+<input type="text" class="calendars" format="dd/mm/yy" placeholder="选择日期"><br>
 
 
-<script src="script/main.js"></script>
+<!-- 模块化引入写法 -->
+<script src="lib/seajs/sea.js"></script>
+<script>
+    seajs.use('./src/calendar');
+</script>
+
+<!-- 普通引入写法 -->
+<!-- <script src="src/calendar.js"></script> -->
 </body>
 </html>

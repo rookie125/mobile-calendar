@@ -1,12 +1,24 @@
-(function(){
+(function (factory) {
+    var global = typeof window != 'undefined' ? window : this;
+
+    if (typeof module === "object" && typeof module.exports === "object") {
+        module.exports = global.document ? factory(global) : function(win) {
+            if (!win.document)throw new Error("document is a undefined");
+            return factory(win);
+        };
+    } else {
+        factory(global);
+    }
+
+}(function (window) {
 
     var mNow = 0,       // 当前相对月份
         yNow = 0,       // 当前相对年份
         silde = false;  // 日历列表正在滑动
     
-    var oCalenWrap = create('div', {"class" : 'calen-wrap'}),			// 最大父级
-		oCalenMask = create('div', {"class" : 'calen-mask'}),           // 灰快遮罩
-        oCalen = create('div', {"class" : 'calen'}),			        // 日历box
+    var oCalenWrap = create('div', {"class" : 'calen-wrap'}),           // 最大父级
+        oCalenMask = create('div', {"class" : 'calen-mask'}),           // 灰快遮罩
+        oCalen = create('div', {"class" : 'calen'}),                    // 日历box
         calendarList = create('div', {"class" : 'calen-list'}),         // 日历列表
         past,           // 过去的时间是否可选
         calenTitles,    // 年，月标题
@@ -22,14 +34,14 @@
         selectMonthBox; // 月份选择
 
     function Calendar(){
-        var oDate = new Date();
-        this.focusObj = null;
-        this.shield = '[]';
-        this.fixDate = {y : oDate.getFullYear(), m : oDate.getMonth() + 1, d : oDate.getDate()};
-        this.startDate = '';
-        this.startJSON = {};
-        this.hours = false;
-        this.hoursPast = false;
+        var oDate       = new Date();
+        this.hours      = false;
+        this.hoursPast  = false;
+        this.focusObj   = null;
+        this.shield     = '[]';
+        this.startDate  = '';
+        this.startJSON  = {};
+        this.fixDate    = {y : oDate.getFullYear(), m : oDate.getMonth() + 1, d : oDate.getDate()};
 
         // 开始初始化
         this.init();
@@ -63,7 +75,6 @@
                 _this.startJSON.prev.m = mNow - 1;
                 _this.startJSON.now.m = mNow;
                 _this.startJSON.next.m = mNow + 1;
-
                 _this.transitions(obj, dir);
             })
 
@@ -259,7 +270,7 @@
             oEv.cancelBubble = true;
         }
         
-	    oCalenMask.onclick = hideCalen;
+        oCalenMask.onclick = hideCalen;
     }
 
     /**
@@ -323,6 +334,12 @@
 
             if(lastMonths[i] == tDay && data.m == 1 && !data.y)toolClass(oNum, 'today');
 
+            // 设置禁用日期
+            if(setShiled(tYear, tMonth - 1, lastMonths[i])){
+                toolClass(oNum, 'pasted');
+                toolClass(oNum, 'shield');
+            }
+
             oSpan.appendChild(oNum);
 
             if(oList.children.length){
@@ -368,7 +385,7 @@
 
             // 设置禁用日期
             if(setShiled(tYear, tMonth, n)){
-                toolClass(oNum, 'expire');
+                // toolClass(oNum, 'expire');
                 toolClass(oNum, 'pasted');
                 toolClass(oNum, 'shield');
             }
@@ -390,6 +407,12 @@
                     }, n);
 
             if(n ==tDay && data.m == -1 && !data.y)toolClass(oNum, 'today');
+
+            // 设置禁用日期
+            if(setShiled(tYear, tMonth + 1, n)){
+                toolClass(oNum, 'pasted');
+                toolClass(oNum, 'shield');
+            }
 
             oSpan.appendChild(oNum);
             oList.appendChild(oSpan);
@@ -469,7 +492,7 @@
         };
 
         if(data.type == 'year'){
-			if(selectYearBox && oCalen)oCalen.removeChild(selectYearBox);
+            if(selectYearBox && oCalen)oCalen.removeChild(selectYearBox);
             oDateList.appendChild(oList);
             selectYearBox = oDateList;
             aYears = arr;
@@ -488,7 +511,7 @@
             selectYearBox.index = -now;
         }
         else {
-        	if(selectMonthBox && oCalen)oCalen.removeChild(selectMonthBox);
+            if(selectMonthBox && oCalen)oCalen.removeChild(selectMonthBox);
             selectMonthBox = oDateList;
             aMonths = arr;
         }
@@ -717,7 +740,6 @@
      */
     Calendar.prototype.switchDate = function(dir, type){
         var _this = this;
-        console.log(mNow, yNow)
         type = type || 'month';
 
         switch(type){
@@ -775,7 +797,6 @@
                 toolClass(obj, 'silde', 'remove');
                 toolClass(obj, 'prev-to', 'remove');
                 toolClass(obj, 'next-to', 'remove');
-
                 _this.addEvent();
                 silde = false;
             })
@@ -900,13 +921,13 @@
     /**
      * 隐藏日历
      */
-	function hideCalen(){
-		toolClass(oCalenWrap, 'close');
+    function hideCalen(){
+        toolClass(oCalenWrap, 'close');
         setTimeout(function(){
-        	toolClass(oCalenWrap, 'active', 'remove');
-        	toolClass(oCalenWrap, 'close', 'remove');
+            toolClass(oCalenWrap, 'active', 'remove');
+            toolClass(oCalenWrap, 'close', 'remove');
         }, 290)
-	}
+    }
     
     /**
      * 日历的格式
@@ -988,8 +1009,12 @@
 
         return data;
     }
+    
+    // window.Calendar = Calendar;
 
     window.addEventListener('load', function(){
         new Calendar();
     }, false);
-})();
+
+    return Calendar;
+}));
