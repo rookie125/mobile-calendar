@@ -738,8 +738,13 @@
                         _this.createTime(_this.focusObj, date, today, past);
                     }
                     else {
-                        if(_this.focusObj.value != null)_this.focusObj.value = date;
-                        if(_this.focusObj.innerHTML != null)_this.focusObj.innerHTML = date;
+                        if(_this.focusObj && typeof _this.focusObj.value == 'undefined'){
+                            _this.focusObj.innerHTML = date;
+                        }
+                        else if(_this.focusObj) {
+                            var type = typeof _this.focusObj.value;
+                            if(type === 'string' || type === 'number')_this.focusObj.value = date;
+                        }
                         hideCalen();
                     }
 
