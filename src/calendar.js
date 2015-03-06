@@ -742,6 +742,16 @@
                         if(_this.focusObj.innerHTML != null)_this.focusObj.innerHTML = date;
                         hideCalen();
                     }
+
+                    var jQuery = jQuery || null;
+                    if(jQuery){
+                        if(jQuery(_this.focusObj) && jQuery(_this.focusObj).change){
+                            jQuery(_this.focusObj).change();
+                        }
+                    }
+                    else {
+                        _this.focusObj.onchange && _this.focusObj.onchange();
+                    }
                 }
             }
         }
