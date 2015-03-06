@@ -58,12 +58,12 @@
 	<input class="calendars" type="text" hours />
 
 定义是否不可选过期时间： <code>**hours-past**</code>，默认可选过期时间    
-* 该属性只有当你定义了<code>**hours**</code> 属性才会生效
+该属性只有当你定义了<code>**hours**</code> 属性才会生效
 
 	<input class="calendars" type="text" hours hours-past />
 
 定义日期的显示格式： <code>**format**</code>, 默认为 <code>**"yy/mm/dd"**</code> , 暂时只支持 斜杠 <code>/</code> 和 横杠 <code>-</code> 作为分割符   
-* <code> yy:年</code> <code>mm:月</code> <code>dd:日</code>
+<code> yy:年</code> <code>mm:月</code> <code>dd:日</code>
 	 
 	<input class="calendars" type="text" format="yy-mm-dd" />
 
