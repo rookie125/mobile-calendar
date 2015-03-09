@@ -743,19 +743,26 @@
                         }
                         else if(_this.focusObj) {
                             var type = typeof _this.focusObj.value;
-                            if(type === 'string' || type === 'number')_this.focusObj.value = date;
+                            if(type === 'string' || type === 'number'){
+                                
+                                if(_this.focusObj.oldValue != date){
+
+                                    _this.focusObj.value = date;
+                                    _this.focusObj.oldValue = date;
+
+                                    var jQuery = (window.jQuery || window.$) || null;
+
+                                    if(jQuery){
+                                        if(jQuery(_this.focusObj) && jQuery(_this.focusObj).change){
+                                            jQuery(_this.focusObj).change();
+                                        }
+                                    } else {
+                                        _this.focusObj.onchange && _this.focusObj.onchange();
+                                    }
+                                }
+                            }
                         }
                         hideCalen();
-                    }
-
-                    var jQuery = jQuery || null;
-                    if(jQuery){
-                        if(jQuery(_this.focusObj) && jQuery(_this.focusObj).change){
-                            jQuery(_this.focusObj).change();
-                        }
-                    }
-                    else {
-                        _this.focusObj.onchange && _this.focusObj.onchange();
                     }
                 }
             }
