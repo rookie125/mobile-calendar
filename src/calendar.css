@@ -11,7 +11,7 @@ html { font-size: 12px; }
 	top: 100%;
 	width: 100%;
 	height: 100%;
-	font-family: arial, 'Hiragino Sans GB', 'Microsoft Yahei', '微软雅黑', '宋体', \5b8b\4f53, Tahoma, Arial, Helvetica, STHeiti;
+	font-family: arial, 'Hiragino Sans GB', 'Microsoft Yahei', 'SimSun', \5b8b\4f53, Tahoma, Arial, Helvetica, STHeiti;
 }
 .calen-wrap.active {
 	top: 0;
@@ -45,6 +45,8 @@ html { font-size: 12px; }
     box-shadow: 0 -1px 6px #999;
     -webkit-transition: .4s;
     transition: .4s;
+}
+.calen,.calen-wrap.active .calen {
     -webkit-transform: translateY(0);
     transform: translateY(0);
     opacity: 1;
@@ -53,13 +55,7 @@ html { font-size: 12px; }
     text-decoration: none;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
-.calen-wrap.active .calen {
-    opacity: 1;
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
-}
 .calen-wrap.close .calen {
-    /*opacity: 0;*/
     -webkit-transform: translateY(100%);
     transform: translateY(100%);
 }
@@ -75,21 +71,20 @@ html { font-size: 12px; }
     text-align: center;
     overflow: hidden;
 }
-.switch-btn {
+.switch-btn,.calen-title {
     display: inline-block;
+    border-radius: 4px;
+    line-height: 30px;
+}
+.switch-btn {
     width: 30px;
     margin: 5px;
-    line-height: 30px;
     color: #39b5b8;
-    border-radius: 4px;
-    font-family: "黑体", "送体";
+    font-family: "SimHei", "SimSun";
 }
 .calen-title {
-    display: inline-block;
     padding: 0 6%;
-    line-height: 30px;
     color: #333;
-    border-radius: 4px;
 }
 .switch-btn:active,
 .calen-title:active,
@@ -164,10 +159,6 @@ html { font-size: 12px; }
     color: #B5B5B5;
     background-color: #eee;
 }
-.calen-list .expire.pasted:active,
-.calen-list .pasted.shield:active {
-    background: none;
-}
 .calen-list .pasted.shield {
     position: relative;
 }
@@ -214,6 +205,10 @@ html { font-size: 12px; }
 .calen-list .next-m.pasted.shield:after,
 .calen-list .prev-m.pasted.shield:after {
     background-color: #D2D2D2;
+}
+.calen-list .today.shield {
+    background-color: #E4E4E4;
+    color: #333;
 }
 .calen-list .today.prev-m,
 .calen-list .today.next-m,
@@ -296,7 +291,9 @@ html { font-size: 12px; }
 .calen-time .expire.pasted {
     color: #ccc;
 }
-.calen-time .expire.pasted:active {
+.calen-time .expire.pasted:active,
+.calen-list .expire.pasted:active,
+.calen-list .pasted.shield:active {
     background: none;
 }
 .calen-years.active {

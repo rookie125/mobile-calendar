@@ -41,7 +41,7 @@
         this.shield     = '[]';
         this.startDate  = '';
         this.startJSON  = {};
-        this.fixDate    = {y : oDate.getFullYear(), m : oDate.getMonth() + 1, d : oDate.getDate()};
+        this.fixDate    = {y : oDate.getFullYear(), m : oDate.getMonth() + 1, d : 0};
 
         // 开始初始化
         this.init();
@@ -96,7 +96,7 @@
 
                         // 设置当前月份高亮
                         for(var x = 0 ; x < aMonths.length ; x++){
-                            if(aMonths[x].getAttribute('data-value') == this.getAttribute('data-value')){
+                            if(attr(aMonths[x], 'data-value') == attr(this, 'data-value')){
                                 toolClass(aMonths[x], 'active');
                             } else {
                                 toolClass(aMonths[x], 'active', 'remove');
@@ -117,10 +117,9 @@
                         // 设置当前年份高亮
                         for(var x = 0 ; x < aYears.length ; x++){
 
-                            if(aYears[x].getAttribute('data-value') == this.getAttribute('data-value')){
+                            if(attr(aYears[x], 'data-value') == attr(this, 'data-value')){
                                 toolClass(aYears[x], 'active');
-                            }
-                            else {
+                            } else {
                                 toolClass(aYears[x], 'active', 'remove');
                             }
                         }
@@ -137,25 +136,10 @@
             for(var i = 0 ; i < aMonths.length ; i++){
 
                 months[i].onclick = function(){
-                    for(var x = 0 ; x < months.length ; x++){
-                        toolClass(months[x], 'active', 'remove');
-                    }
+                    for(var x = 0 ; x < months.length ; x++)toolClass(months[x], 'active', 'remove');
 
-                    mNow += this.getAttribute('data-value') - monthTitle.getAttribute('data-value');
-
-                    _this.startJSON.prev.m = mNow - 1;
-                    _this.startJSON.now.m = mNow;
-                    _this.startJSON.next.m = mNow + 1;
-
-                    _this.appendList(_this.startJSON, function(){
-                        _this.addEvent();
-                    });
-
-                    toolClass(this, 'active');
-                    toolClass(selectMonthBox, 'active', 'remove');
-
-                    selectYearBox.show = false;
-                    selectMonthBox.show = false;
+                    mNow += attr(this, 'data-value') - attr(monthTitle, 'data-value');
+                    _this.selectDate(this, selectMonthBox, "m", mNow);
                 }
             }
         });
@@ -165,14 +149,15 @@
 
             aCalendars[i].ontouchstart = aCalendars[i].onmousedown = function(){
 
-                var start = Number(this.getAttribute('start')) || 1915,
-                    end = Number(this.getAttribute('end')) || 2020;
-                    past = !(this.getAttribute('past') == null);
-                _this.hours = !(this.getAttribute('hours') == null);
-                _this.hoursPast = !(this.getAttribute('hours-past') == null);
+                var start = Number(attr(this, 'start')) || 1915,
+                    end = Number(attr(this, 'end')) || 2020;
 
-                _this.shield = getDate(this.getAttribute('shield') || '');
-                _this.startDate = getDate(this.getAttribute('start-date') || '');
+                past = !(attr(this, 'past') == null);
+                _this.hours = !(attr(this, 'hours') == null);
+                _this.hoursPast = !(attr(this, 'hours-past') == null);
+
+                _this.shield = getDate(attr(this, 'shield') || '');
+                _this.startDate = getDate(attr(this, 'start-date') || '');
                 var prev,now,next, oDate = new Date();
 
                 if(_this.startDate instanceof Array && _this.startDate.length){
@@ -181,12 +166,10 @@
                     yNow = startDate.y - oDate.getFullYear();
                     mNow = startDate.m - (oDate.getMonth() + 1);
 
-                    _this.fixDate.y = startDate.y;
-                    _this.fixDate.m = startDate.m;
-                    _this.fixDate.d = startDate.d;                    
+                    for(var a in startDate)_this.fixDate[a] = startDate[a];
 
-                    prev = { y : yNow, m : mNow - 1, d : startDate.d },
-                    now = { y : yNow, m : mNow, d : startDate.d },
+                    prev = { y : yNow, m : mNow - 1, d : startDate.d };
+                    now  = { y : yNow, m : mNow, d : startDate.d };
                     next = { y : yNow, m : mNow + 1, d : startDate.d };
 
                     _this.startJSON = {"prev" : prev, "now" : now, "next" : next};
@@ -194,7 +177,7 @@
                 else {
                     _this.fixDate.y = oDate.getFullYear();
                     _this.fixDate.m = oDate.getMonth() + 1;
-                    _this.fixDate.d = oDate.getDate();
+                    _this.fixDate.d = 0;
                 }
 
                 if(_this.focusObj != this){
@@ -218,25 +201,10 @@
                         for(var k = 0 ; k < years.length ; k++){
 
                             years[k].onclick = function(){
-                                for(var x = 0 ; x < years.length ; x++){
-                                    toolClass(years[x], 'active', 'remove');
-                                }
+                                for(var x = 0 ; x < years.length ; x++)toolClass(years[x], 'active', 'remove');
 
-                                yNow += this.getAttribute('data-value') - yearTitle.getAttribute('data-value');
-
-                                _this.startJSON.prev.y = yNow;
-                                _this.startJSON.now.y = yNow;
-                                _this.startJSON.next.y = yNow;
-
-                                _this.appendList(_this.startJSON, function(){
-                                    _this.addEvent();
-                                });
-
-                                toolClass(this, 'active');
-                                toolClass(selectYearBox, 'active', 'remove');
-
-                                selectYearBox.show = false;
-                                selectMonthBox.show = false;
+                                yNow += attr(this, 'data-value') - attr(yearTitle, 'data-value');
+                                _this.selectDate(this, selectYearBox, "y", yNow);
                             }
                         }
 
@@ -321,8 +289,8 @@
         if(setTitle){
             yearTitle.innerHTML = tYear;
             monthTitle.innerHTML = (tMonth < 10 ? '0' + tMonth : tMonth);
-            yearTitle.setAttribute('data-value', tYear);
-            monthTitle.setAttribute('data-value', tMonth - 1);
+            attr(yearTitle, 'data-value', tYear);
+            attr(monthTitle, 'data-value', tMonth - 1);
         }
 
         // 创建上月尾部分
@@ -376,15 +344,15 @@
             }
 
             if(!data.m && !data.y || !data.y && _this.fixDate.m == tMonth){
-
-                if(_this.fixDate.d == n || !_this.fixDate.d && n == tDay){
+                console.log(_this.fixDate.d, n , tDay)
+                if((_this.fixDate.d == n && !!data.m) || (!_this.fixDate.d && n == tDay)){
                     oNum.className = oNum.className + ' today';
                 }
-                else if(past && n < tDay){
+                else if((past || _this.hoursPast) && n < tDay){
                     oNum.className = oNum.className + ' expire pasted';
                 }
             }
-            else if((past && data.m < 0 && data.y <= 0)){
+            else if((past || _this.hoursPast) && data.m < 0 && data.y <= 0){
                 oNum.className = ' expire pasted';
             }
 
@@ -569,7 +537,7 @@
             var arr = getObj(oTime, 'a');
 
             for(var i = 0 ; i < arr.length ; i++){
-                child.push({"obj" : arr[i], "time" : parseInt(arr[i].getAttribute('data-time'), 10)});
+                child.push({"obj" : arr[i], "time" : parseInt(attr(arr[i], 'data-time'), 10)});
             }
         }
 
@@ -690,7 +658,7 @@
              week.appendChild(create('span', data, weeks.charAt(i)));
          }
          oCalen.appendChild(week);
-     }
+    }
 
     /**
      *
@@ -731,8 +699,8 @@
                 }
                 else if(!toolClass(this, 'pasted', 'has') && !toolClass(this, 'shield', 'has')){
 
-                    var date = this.getAttribute('data-calen'), today = this.innerHTML;
-                        date = format(date, (_this.focusObj.getAttribute('format') || false));
+                    var date = attr(this, 'data-calen'), today = this.innerHTML;
+                        date = format(date, (attr(_this.focusObj, 'format') || false));
 
                     if(_this.hours){
                         _this.createTime(_this.focusObj, date, today, past);
@@ -744,7 +712,6 @@
                         else if(_this.focusObj) {
                             var type = typeof _this.focusObj.value;
                             if(type === 'string' || type === 'number'){
-                                
                                 if(_this.focusObj.oldValue != date){
 
                                     _this.focusObj.value = date;
@@ -843,36 +810,55 @@
         }
     }
 
+    /**/
+    Calendar.prototype.selectDate = function(obj, obj2, attr, val){
+        var _this = this;
+
+        this.startJSON.prev[attr] = (attr == 'm' ? val - 1 : val);
+        this.startJSON.now[attr] = val;
+        this.startJSON.next[attr] = (attr == 'm' ? val + 1 : val);
+
+        this.appendList(this.startJSON, function(){
+            _this.addEvent();
+        });
+
+        toolClass(obj, 'active');
+        toolClass(obj2, 'active', 'remove');
+
+        selectYearBox.show = false;
+        selectMonthBox.show = false;
+    }
+
     /**
      * 滑动切换日期
      * @param  {[type]} ev [description]
      * @return {[type]}    [description]
      */
     function sildeSwitch(obj, callBack){
-         obj.ontouchstart = start;
-         obj.onmousedown = start;
+        obj.ontouchstart = start;
+        obj.onmousedown = start;
 
-         function start(ev){
-             var oEv = ev.targetTouches ? ev.targetTouches[0] : (ev || event);
-             var disX = oEv.pageX;
-             var needW = parseInt(document.documentElement.clientWidth / 5, 10);
-             var dir;
+        function start(ev){
+            var oEv = ev.targetTouches ? ev.targetTouches[0] : (ev || event);
+            var disX = oEv.pageX;
+            var needW = parseInt(document.documentElement.clientWidth / 5, 10);
+            var dir;
 
-             var _this = this;
+            var _this = this;
 
-             function move(ev){
-                 var oEv = ev.targetTouches ? ev.targetTouches[0] : (ev || event);
-                 dir = oEv.pageX - disX;
-                 if(silde)return false;
+            function move(ev){
+                var oEv = ev.targetTouches ? ev.targetTouches[0] : (ev || event);
+                dir = oEv.pageX - disX;
+                if(silde)return false;
 
-                 if(Math.abs(dir) >= needW){
-                     silde = true;
+                if(Math.abs(dir) >= needW){
+                    silde = true;
 
-                     callBack && callBack(_this, dir);
-                 }
+                    callBack && callBack(_this, dir);
+                }
 
-                 oEv.preventDefault && oEv.preventDefault();
-                 return false;
+                oEv.preventDefault && oEv.preventDefault();
+                return false;
             }
 
             function end(ev){
@@ -890,7 +876,7 @@
             this.ontouchend = end;
             this.onmouseup = end;
         }
-     }
+    }
 
     /**
      * 查找/添加/删除 className
@@ -1049,8 +1035,17 @@
 
         return data;
     }
-    
-    // window.Calendar = Calendar;
+
+    /**
+     * 操作对象属性
+     */
+    function attr(obj, attr, val){
+        if(!obj)return null;
+        switch(arguments.length){
+            case 3: obj.setAttribute(attr, val); break;
+            case 2: return obj.getAttribute(attr); break;
+        }
+    }
 
     window.addEventListener('load', function(){
         new Calendar();
