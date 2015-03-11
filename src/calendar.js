@@ -20,6 +20,7 @@
         oCalenMask = create('div', {"class" : 'calen-mask'}),           // 灰快遮罩
         oCalen = create('div', {"class" : 'calen'}),                    // 日历box
         calendarList = create('div', {"class" : 'calen-list'}),         // 日历列表
+
         past,           // 过去的时间是否可选
         calenTitles,    // 年，月标题
         aMonths,        // 可以选择的所有月份
@@ -148,6 +149,7 @@
         for(var i = 0 ; i < aCalendars.length ; i++){
 
             aCalendars[i].ontouchstart = aCalendars[i].onmousedown = function(){
+                if(attr(this, 'disabled') != null)return;
 
                 var start = Number(attr(this, 'start')) || 1915,
                     end = Number(attr(this, 'end')) || 2020;
@@ -270,14 +272,15 @@
 
         var dSun = date.getDate();
 
-        date.setDate(1);
+            date.setDate(1);
         var dWeek = date.getDay();
 
         var date = new Date();
             date.setFullYear(date.getFullYear() + data.y, date.getMonth() + data.m, 1, 0, 0, 0);
 
         // 获取当前年月
-        var tMonth = date.getMonth() + 1, tYear = date.getFullYear();
+        var tMonth = date.getMonth() + 1,
+            tYear = date.getFullYear();
 
         // 设置上一个月的最后一天
             date.setDate(0);
@@ -311,10 +314,7 @@
             }
 
             // 设置禁用日期
-            if(setShiled(tYear, tMonth - 1, lastMonths[i])){
-                toolClass(oNum, 'pasted');
-                toolClass(oNum, 'shield');
-            }
+            if(setShiled(tYear, tMonth - 1, lastMonths[i]))toolClass(oNum, 'pasted shield');
 
             oSpan.appendChild(oNum);
 
@@ -339,8 +339,8 @@
                 }, n),
                 oDate = new Date();
 
-            if(created % 7 == 1 || created % 7 == 0){
-                oNum.className = 'weekend';
+            switch(created % 7){
+                case 0: case 1: oNum.className = 'weekend'; break;
             }
 
             if(!data.m && !data.y || !data.y && _this.fixDate.m == tMonth){
@@ -358,17 +358,11 @@
 
             // 设置是否小于用户定义的开始日期
             if(tYear <= _this.fixDate.y && tMonth <= _this.fixDate.m && n < data.d || tYear <= _this.fixDate.y && tMonth < _this.fixDate.m){
-                if(_this.startDate){
-                    toolClass(oNum, 'expire');
-                    toolClass(oNum, 'pasted');
-                }
+                if(_this.startDate)toolClass(oNum, 'expire pasted');
             }
 
             // 设置禁用日期
-            if(setShiled(tYear, tMonth, n)){
-                toolClass(oNum, 'pasted');
-                toolClass(oNum, 'shield');
-            }
+            if(setShiled(tYear, tMonth, n))toolClass(oNum, 'pasted shield');
 
             oSpan.appendChild(oNum);
             oList.appendChild(oSpan);
@@ -391,10 +385,7 @@
             }
 
             // 设置禁用日期
-            if(setShiled(tYear, tMonth + 1, n)){
-                toolClass(oNum, 'pasted');
-                toolClass(oNum, 'shield');
-            }
+            if(setShiled(tYear, tMonth + 1, n))toolClass(oNum, 'pasted shield');
 
             oSpan.appendChild(oNum);
             oList.appendChild(oSpan);
@@ -525,8 +516,6 @@
                 var oSpan = create('span'),
                     oNum = create('a', {"href" : 'javascript:;', "data-time" : time}, time);
 
-                if(past && mNow < 0 && yNow <= 0){}
-
                 oSpan.appendChild(oNum);
                 oTime.appendChild(oSpan);
                 child.push({"obj" : oNum, "time" : parseInt(time, 10)});
@@ -546,13 +535,10 @@
         for(var i = 0 ; i < child.length ; i++){
 
             if(_this.hoursPast && ((mNow < 0 && yNow <= 0) || (today == day &&  child[i].time <= hours) || (mNow <= 0 && yNow <= 0 && today < day))){
-                toolClass(child[i].obj, 'expire')
-                toolClass(child[i].obj, 'pasted');
+                toolClass(child[i].obj, 'expire pasted');
                 child[i].obj.active = false;
-            }
-            else {
-                toolClass(child[i].obj, 'expire', 'remove');
-                toolClass(child[i].obj, 'pasted', 'remove');
+            } else {
+                toolClass(child[i].obj, 'expire pasted', 'remove');
                 child[i].obj.active = true;
             }
 
@@ -649,11 +635,7 @@
 
          for(var i = 0 ; i < 7 ; i++){
             var n = i + 1, data = {};
-
-            // 周末加上标识
-            if(n % 7 == 1 || n % 7 == 0){
-                data["class"] = 'weekend';
-            }
+            if(n % 7 == 1 || n % 7 == 0)data["class"] = 'weekend';
 
              week.appendChild(create('span', data, weeks.charAt(i)));
          }
@@ -786,24 +768,19 @@
         var _this = this;
 
         if(dir > 0){
-            toolClass(obj, 'silde');
-            toolClass(obj, 'prev-to');
+            toolClass(obj, 'silde prev-to');
         }
         else {
-            toolClass(obj, 'silde');
-            toolClass(obj, 'next-to');
+            toolClass(obj, 'silde next-to');
         }
 
         setTimeout(function(){
-            console.log(_this.startJSON);
             end();
         }, 500)
 
         function end(){
             _this.appendList(_this.startJSON, function(){
-                toolClass(obj, 'silde', 'remove');
-                toolClass(obj, 'prev-to', 'remove');
-                toolClass(obj, 'next-to', 'remove');
+                toolClass(obj, 'silde prev-to next-to', 'remove');
                 _this.addEvent();
                 silde = false;
             })
@@ -890,18 +867,22 @@
         var nowClass = obj.className.replace(/\s+/g, ' ');
             nowClass = nowClass.split(' ');
 
-            sClass = sClass.replace(/\s+/, '');
+            sClass = sClass.replace('^\s+|\s+$').replace(/\s+/, ' ').split(' ');
             type = type || 'add';
 
         for(var i = 0 ; i < nowClass.length ; i++){
             switch(type){
-                case 'has': if(sClass == nowClass[i])return true; break;
+                case 'has': if(sClass[0] == nowClass[i])return true; break;
                 case 'add':
-                case 'remove': if(sClass == nowClass[i])nowClass.splice(i, 1); break;
+                case 'remove': 
+                    for(var x = 0 ; x < sClass.length ; x++){
+                        if(sClass[x] == nowClass[i])nowClass.splice(i, 1);
+                    }
+                break;
             }
         }
 
-        if(type == 'add')nowClass.push(sClass);
+        if(type == 'add')nowClass = nowClass.concat(sClass);
 
         obj.className = nowClass.join(' ');
     }
@@ -950,9 +931,8 @@
     function hideCalen(){
         toolClass(oCalenWrap, 'close');
         setTimeout(function(){
-            toolClass(oCalenWrap, 'active', 'remove');
-            toolClass(oCalenWrap, 'close', 'remove');
-        }, 290)
+            toolClass(oCalenWrap, 'active close', 'remove');
+        }, 290);
     }
     
     /**
@@ -970,7 +950,7 @@
         
         for(var i = 0 ; i < fmat.length ; i++){
             if(n.charAt(count) != fmat.charAt(i)){
-                n+=fmat.charAt(i);
+                n += fmat.charAt(i);
                 count++;
             }
         }        
