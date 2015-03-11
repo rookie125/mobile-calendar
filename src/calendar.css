@@ -6,6 +6,7 @@ html { font-size: 12px; }
     transition: .5s;
 }
 .calen-wrap {
+    display: none;
 	position: fixed;
 	left: 0;
 	top: 100%;
@@ -14,7 +15,9 @@ html { font-size: 12px; }
 	font-family: arial, 'Hiragino Sans GB', 'Microsoft Yahei', 'SimSun', \5b8b\4f53, Tahoma, Arial, Helvetica, STHeiti;
 }
 .calen-wrap.active {
+    display: block;
 	top: 0;
+    z-index: 100;
 }
 .calen-mask,
 .calen {

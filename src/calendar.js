@@ -344,8 +344,7 @@
             }
 
             if(!data.m && !data.y || !data.y && _this.fixDate.m == tMonth){
-                console.log(_this.fixDate.d, n , tDay)
-                if((_this.fixDate.d == n && !!data.m) || (!_this.fixDate.d && n == tDay)){
+                if(_this.fixDate.d == n || (!_this.fixDate.d && n == tDay)){
                     oNum.className = oNum.className + ' today';
                 }
                 else if((past || _this.hoursPast) && n < tDay){
