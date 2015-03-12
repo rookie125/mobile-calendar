@@ -148,7 +148,8 @@
         // 显示日历
         for(var i = 0 ; i < aCalendars.length ; i++){
 
-            aCalendars[i].ontouchstart = aCalendars[i].onmousedown = function(){
+            attr(aCalendars[i], 'readonly', 'true');
+            aCalendars[i].onfocus = function(){
                 if(attr(this, 'disabled') != null)return;
 
                 var start = Number(attr(this, 'start')) || 1915,
@@ -236,9 +237,6 @@
 
                 toolClass(oCalenWrap, 'active');
                 _this.focusObj = this;
-
-                this.blur();
-                return false;
             }
         }
         oCalen.onclick = function(ev){
@@ -554,6 +552,7 @@
                             obj.innerHTML = val;
                         }
                         hideCalen();
+                        _this.changes();
                     }
                     toolClass(oTime, 'active', 'remove');
                 }
@@ -698,15 +697,7 @@
                                     _this.focusObj.value = date;
                                     _this.focusObj.oldValue = date;
 
-                                    var jQuery = (window.jQuery || window.$) || null;
-
-                                    if(jQuery){
-                                        if(jQuery(_this.focusObj) && jQuery(_this.focusObj).change){
-                                            jQuery(_this.focusObj).change();
-                                        }
-                                    } else {
-                                        _this.focusObj.onchange && _this.focusObj.onchange();
-                                    }
+                                    _this.changes();
                                 }
                             }
                         }
@@ -803,6 +794,20 @@
 
         selectYearBox.show = false;
         selectMonthBox.show = false;
+    }
+
+    /**/
+    Calendar.prototype.changes = function(){
+        var jQuery = (window.jQuery || window.$) || null;
+
+        if(jQuery){
+            if(jQuery(this.focusObj) && jQuery(this.focusObj).change){
+                jQuery(this.focusObj).change();
+            }
+        } else {
+
+            this.focusObj.onchange && this.focusObj.onchange();
+        }
     }
 
     /**
