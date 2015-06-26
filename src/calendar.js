@@ -342,7 +342,8 @@
             }
 
             if(!data.m && !data.y || !data.y && _this.fixDate.m == tMonth){
-                if(_this.fixDate.d == n || (!_this.fixDate.d && n == tDay)){
+                if((_this.fixDate.d == n && _this.fixDate.m == tMonth) || (!_this.fixDate.d && n == tDay)){
+
                     oNum.className = oNum.className + ' today';
                 }
                 else if((past || _this.hoursPast) && n < tDay){
