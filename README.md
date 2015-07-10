@@ -4,6 +4,12 @@
 可定义是否可以选择过期日期   
 日历列表、年份选择支持左右滑动切换月份、年份。   
 
+
+###先体验一下再说
+![在线地址](img/code.png '二维码')
+
+####[地址：http://calendar.coding.io/](http://calendar.coding.io/)
+
 选择列表  
 ![选择列表](img/4.png '选择列表')
 

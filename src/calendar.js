@@ -817,8 +817,8 @@
      * @return {[type]}    [description]
      */
     function sildeSwitch(obj, callBack){
-        obj.ontouchstart = start;
         obj.onmousedown = start;
+        obj.addEventListener('touchstart', start, false);
 
         function start(ev){
             var oEv = ev.targetTouches ? ev.targetTouches[0] : (ev || event);
@@ -844,19 +844,18 @@
             }
 
             function end(ev){
-                this.ontouchmove && (this.ontouchmove = null);
-                this.ontouchend && (this.ontouchend = null);
                 this.onmousemove && (this.onmousemove = null);
                 this.onmouseup && (this.onmouseup = null);
+
+                this.removeEventListener('touchmove', move, false);
+                this.removeEventListener('touchend', end, false);
             }
 
-            // 移动
-            this.ontouchmove = move;
             this.onmousemove = move;
-
-            // 结束
-            this.ontouchend = end;
             this.onmouseup = end;
+
+            obj.addEventListener('touchmove', move, false);
+            obj.addEventListener('touchend', end, false);
         }
     }
 
