@@ -35,10 +35,13 @@
 	height: 100%;
 	background-color: #000;
 	opacity: .8;
-	-webkit-transition: opacity .5s
+    -webkit-transition: opacity .5s
+    -moz-transition: opacity .5s
+    -ms-transition: opacity .5s
+    -o-transition: opacity .5s
 	transition: opacity .5s
 }
-.calendar .close {
+.calendar.close {
     opacity: 0;
 }
 .calendar-content {
