@@ -55,7 +55,7 @@
 }
 .calen-header {
     line-height: 40px;
-    font-size: 1.1rem;
+    font-size: 1.75em;
     overflow: hidden;
 }
 .calen-header > div {
@@ -86,12 +86,12 @@
     color: #fff;
 }
 .calen-week {
-    font-size: 0;
+    overflow: hidden;
 }
 .calen-week span {
-    display: inline-block;
+    float: left;
     width: 14.28%;
-    font-size: 1rem;
+    font-size: 1.6em;
     line-height: 34px;
     text-align: center;
 }
@@ -101,7 +101,6 @@
     display: box;
     width: 300%;
     height: 210px;
-    font-size: 0;
     z-index: 5;
     -webkit-transform: translateX(-33.3333%);
      transform: translateX(-33.3333%);
@@ -121,7 +120,7 @@
 .calen-list span {
     float: left;
     width: 14.28571%;
-    font-size: .9rem;
+    font-size: 1.5em;
     line-height: 34px;
     text-align: center;
 }
@@ -260,7 +259,7 @@
 .calen-time a {
     display: inline-block;
     width: 80%;
-    font-size: 1.1rem;
+    font-size: 1.6em;
     line-height: 30px;
     color: #333;
     letter-spacing: 2px;
@@ -268,7 +267,7 @@
 }
 .calen-time a {
     line-height: 25px;
-    font-size: .9rem;
+    font-size: 1.45em;
 }
 .calen-months a:active,
 .calen-years a:active,
