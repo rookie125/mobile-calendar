@@ -16,10 +16,10 @@
         yNow = 0,       // 当前相对年份
         silde = false;  // 日历列表正在滑动
     
-    var oCalenWrap = create('div', {"class" : 'calen-wrap'}),           // 最大父级
-        oCalenMask = create('div', {"class" : 'calen-mask'}),           // 灰快遮罩
-        oCalen = create('div', {"class" : 'calen'}),                    // 日历box
-        calendarList = create('div', {"class" : 'calen-list'}),         // 日历列表
+    var oCalenWrap = create('div', {"class" : 'calendar'}),           // 最大父级
+        oCalenMask = create('div', {"class" : 'calendar-mask'}),           // 灰快遮罩
+        oCalen = create('div', {"class" : 'calendar-content'}),                    // 日历box
+        calendarList = create('div', {"class" : 'calendar-list'}),         // 日历列表
 
         past,           // 过去的时间是否可选
         calenTitles,    // 年，月标题
@@ -58,7 +58,7 @@
         document.body.appendChild(oCalenWrap);
         oCalenWrap.appendChild(oCalenMask);
         oCalenWrap.appendChild(oCalen);
-        calenTitle = getObj(oCalen, '.calen-title');
+        calenTitle = getObj(oCalen, '.calendar-title');
 
 
         // 创建头部
@@ -84,7 +84,7 @@
 
                 calenTitles[i].onclick = function(){
 
-                    if(toolClass(this, 'calen-month-txt', 'has')){
+                    if(toolClass(this, 'calendar-month-txt', 'has')){
 
                         // 显示或者隐藏
                         toolClass(selectMonthBox, 'active', (selectMonthBox.show ? 'remove' : 'add'));
@@ -106,7 +106,7 @@
 
                         selectMonthBox.show = !selectMonthBox.show;
                     }
-                    else if(toolClass(this, 'calen-year-txt', 'has')){
+                    else if(toolClass(this, 'calendar-year-txt', 'has')){
 
                         toolClass(selectYearBox, 'active', (selectYearBox.show ? 'remove' : 'add'));
 
@@ -421,7 +421,7 @@
         data.type = data.type || 'month';
 
         var oDateList = create('div', {
-            "class" : (data.type == 'month' ? 'calen-months' : 'calen-years')
+            "class" : (data.type == 'month' ? 'calendar-months' : 'calendar-years')
         });
 
         var oList = create('div'),
@@ -496,7 +496,7 @@
      * @return {[type]} [description]
      */
     Calendar.prototype.createTime = function(obj, date, today, past){
-        var oTime = getObj(oCalen, '.calen-time'),
+        var oTime = getObj(oCalen, '.calendar-time'),
             child = [],
             oDate = new Date(),
             day = oDate.getDate(),
@@ -504,7 +504,7 @@
             _this = this;
 
         if(!oTime.length){
-            oTime = create('div', {"class" : 'calen-time'});
+            oTime = create('div', {"class" : 'calendar-time'});
 
             for(var i = 0 ; i < 24 ; i++){
 
@@ -571,21 +571,21 @@
         calenTitles = calenTitles || [];
 
         var _this = this;
-        var header = create('div', {"class" : 'calen-header'});
+        var header = create('div', {"class" : 'calendar-header'});
 
-        var year = create('div', {"class" : 'calen-year'}),
-            prevYear = create('a', {"class" : 'float-l year-prev switch-btn', "href" : 'javascript:;'}, '&lt;'),
-            nextYear = create('a', {"class" : 'float-r year-next switch-btn', "href" : 'javascript:;'}, '&gt;'),
-            calenYearTxt = create('a', {"class" : 'calen-year-txt calen-title', "href" : 'javascript:;'});
+        var year = create('div', {"class" : 'calendar-year'}),
+            prevYear = create('a', {"class" : 'year-prev switch-btn', "href" : 'javascript:;'}, '&lt;'),
+            nextYear = create('a', {"class" : 'year-next switch-btn', "href" : 'javascript:;'}, '&gt;'),
+            calenYearTxt = create('a', {"class" : 'calendar-year-txt calendar-title', "href" : 'javascript:;'});
 
         year.appendChild(prevYear);
         year.appendChild(calenYearTxt);
         year.appendChild(nextYear);
 
-        var month = create('div', {"class" : 'calen-month'}),
-            prevMonth = create('a', {"class" : 'float-l month-prev switch-btn', "href" : 'javascript:;'}, '&lt;'),
-            nextMonth = create('a', {"class" : 'float-r month-next switch-btn', "href" : 'javascript:;'}, '&gt;'),
-            calenMonthTxt = create('a', {"class" : 'calen-month-txt calen-title', "href" : 'javascript:;'});
+        var month = create('div', {"class" : 'calendar-month'}),
+            prevMonth = create('a', {"class" : 'month-prev switch-btn', "href" : 'javascript:;'}, '&lt;'),
+            nextMonth = create('a', {"class" : 'month-next switch-btn', "href" : 'javascript:;'}, '&gt;'),
+            calenMonthTxt = create('a', {"class" : 'calendar-month-txt calendar-title', "href" : 'javascript:;'});
 
 
         month.appendChild(prevMonth);
@@ -629,7 +629,7 @@
      * @return {[type]}      [description]
      */
     Calendar.prototype.createWeek = function(){
-         var week = create('div', {"class" : 'calen-week'}),
+         var week = create('div', {"class" : 'calendar-week'}),
              weeks = '日一二三四五六';
 
          for(var i = 0 ; i < 7 ; i++){

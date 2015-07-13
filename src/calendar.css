@@ -1,13 +1,11 @@
-.float-l { float: left; }
-.float-r { float: right; }
-.silde {
-    -webkit-transition: .5s;
-    transition: .5s;
-}
 .calendars {
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
-.calen-wrap {
+.calendar .silde {
+    -webkit-transition: .5s;
+    transition: .5s;
+}
+.calendar {
     display: none;
 	position: fixed;
 	left: 0;
@@ -20,19 +18,19 @@
     transition: .3s;
     opacity: 1;
 }
-.calen-wrap.active {
+.calendar.active {
     display: block;
 	top: 0;
     z-index: 100;
 }
-.calen-mask,
-.calen {
+.calendar .calendar-mask,
+.calendar-content {
 	position: absolute;
 	bottom: 0;
 	width: 100%;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
-.calen-mask {
+.calendar .calendar-mask {
 	left: 0;
 	height: 100%;
 	background-color: #000;
@@ -40,62 +38,68 @@
 	-webkit-transition: opacity .5s
 	transition: opacity .5s
 }
-.calen-wrap.close {
+.calendar .close {
     opacity: 0;
 }
-.calen {
+.calendar-content {
     background-color: #FFFFFF;
     font-size: 10px;
     color: #303030;
     overflow: hidden;
 }
-.calen a {
+.calendar a {
     text-decoration: none;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
-.calen-header {
+.calendar .calendar-header {
     line-height: 40px;
     font-size: 1.75em;
     overflow: hidden;
 }
-.calen-header > div {
+.calendar .calendar-header > div {
     float: left;
     width: 50%;
     text-align: center;
     overflow: hidden;
 }
-.switch-btn,.calen-title {
+.calendar .calendar-header a:first-of-type {
+    float: left;
+}
+.calendar .calendar-header a:last-of-type {
+    float: right;
+}
+.calendar .switch-btn,.calendar-title {
     display: inline-block;
     border-radius: 4px;
     line-height: 30px;
 }
-.switch-btn {
+.calendar .switch-btn {
     width: 30px;
     margin: 5px;
     color: #39b5b8;
     font-family: "SimHei", "SimSun";
 }
-.calen-title {
+.calendar .calendar-title {
     padding: 0 6%;
     color: #333;
 }
-.switch-btn:active,
-.calen-title:active,
-.calen-header a.active {
+.calendar .switch-btn:active,
+.calendar .calendar-title:active,
+.calendar .calendar-header a.active {
     background-color: #39b5b8;
     color: #fff;
 }
-.calen-week {
+.calendar .calendar-week {
     overflow: hidden;
 }
-.calen-week span {
+.calendar .calendar-week span {
     float: left;
     width: 14.28%;
     font-size: 1.6em;
     line-height: 34px;
     text-align: center;
 }
-.calen-list {
+.calendar .calendar-list {
     position: relative;
     display: -webkit-box;
     display: box;
@@ -105,26 +109,26 @@
     -webkit-transform: translateX(-33.3333%);
      transform: translateX(-33.3333%);
 }
-.calen-list > div {
+.calendar .calendar-list > div {
     width: 33.3333%;
     overflow: hidden;
 }
-.calen-list.prev-to {
+.calendar .calendar-list.prev-to {
     -webkit-transform: translateX(0);
     transform: translateX(0);
 }
-.calen-list.next-to {
+.calendar .calendar-list.next-to {
     -webkit-transform: translateX(-66.6666%);
     transform: translateX(-66.6666%);
 }
-.calen-list span {
+.calendar .calendar-list span {
     float: left;
     width: 14.28571%;
     font-size: 1.5em;
     line-height: 34px;
     text-align: center;
 }
-.calen-list a {
+.calendar .calendar-list a {
     display: inline-block;
     width: 30px;
     line-height: 30px;
@@ -132,53 +136,53 @@
     border-radius: 50%;
     color: #333;
 }
-.calen-list a:active {
+.calendar .calendar-list a:active {
     background-color: #26a1a4;
     color: #fff;
 }
-.calen-week .weekend,
-.calen-list .weekend,
-.calen-week .weekend:active,
-.calen-list .weekend:active {
+.calendar .calendar-week .weekend,
+.calendar .calendar-list .weekend,
+.calendar .calendar-week .weekend:active,
+.calendar .calendar-list .weekend:active {
     color: #E59313;
 }
 
-.calen-list .expire,
-.calen-list .expire.pasted {
+.calendar .calendar-list .expire,
+.calendar .calendar-list .expire.pasted {
     color: #B5B5B5;
 }
-.calen-list .expire:active {
+.calendar .calendar-list .expire:active {
     color: #B5B5B5;
     background-color: #eee;
 }
-.calen-list .pasted.shield {
+.calendar .calendar-list .pasted.shield {
     position: relative;
 }
-.calen-list .pasted.shield:active {
+.calendar .calendar-list .pasted.shield:active {
     color: #333;
 }
-.calen-list .expire.pasted.shield:active {
+.calendar .calendar-list .expire.pasted.shield:active {
     color: #B5B5B5;
 }
-.calen-list .weekend.pasted.shield:active {
+.calendar .calendar-list .weekend.pasted.shield:active {
     color: #E59313;
 }
-.calen-list .pasted.shield:before,
-.calen-list .pasted.shield:after {
+.calendar .calendar-list .pasted.shield:before,
+.calendar .calendar-list .pasted.shield:after {
     position: absolute;
     content: "";
     left: 0;
     top: 0;
     width: 100%;
 }
-.calen-list .pasted.shield:before {
+.calendar .calendar-list .pasted.shield:before {
     height: 100%;
     border: 1px solid #FFA0A0;
     border-radius: 50%;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
-.calen-list .pasted.shield:after {
+.calendar .calendar-list .pasted.shield:after {
     top: 50%;
     height: 1px;
     background-color: #FFA0A0;
@@ -186,42 +190,42 @@
     transform: rotate(40deg);
 }
 
-.calen-list .prev-m,
-.calen-list .next-m {
+.calendar .calendar-list .prev-m,
+.calendar .calendar-list .next-m {
     color: #DBDBDB;
 }
-.calen-list .next-m.pasted.shield:before,
-.calen-list .prev-m.pasted.shield:before {
+.calendar .calendar-list .next-m.pasted.shield:before,
+.calendar .calendar-list .prev-m.pasted.shield:before {
     border-color: #D2D2D2;
 }
-.calen-list .next-m.pasted.shield:after,
-.calen-list .prev-m.pasted.shield:after {
+.calendar .calendar-list .next-m.pasted.shield:after,
+.calendar .calendar-list .prev-m.pasted.shield:after {
     background-color: #D2D2D2;
 }
-.calen-list .today.shield {
+.calendar .calendar-list .today.shield {
     background-color: #E4E4E4;
     color: #333;
 }
-.calen-list .today.prev-m,
-.calen-list .today.next-m,
-.calen-list .today.prev-m:active,
-.calen-list .today.next-m:active {
+.calendar .calendar-list .today.prev-m,
+.calendar .calendar-list .today.next-m,
+.calendar .calendar-list .today.prev-m:active,
+.calendar .calendar-list .today.next-m:active {
     color: #fff;
     background-color: #CAFCD1;
 }
-.calen-list .prev-m:active,
-.calen-list .next-m:active {
+.calendar .calendar-list .prev-m:active,
+.calendar .calendar-list .next-m:active {
     background-color: #e3e2e2;
 }
 
-.calen-list .today,
-.calen-list .today:active {
+.calendar .calendar-list .today,
+.calendar .calendar-list .today:active {
     background-color: #2FCA60;
     color: #fff;
 }
-.calen-months,
-.calen-years,
-.calen-time {
+.calendar .calendar-months,
+.calendar .calendar-years,
+.calendar .calendar-time {
 	display: none;
     position: absolute;
     bottom: 0;
@@ -233,14 +237,14 @@
     box-shadow: 0 -1px 6px #eee;
     z-index: 8;
 }
-.calen-months.active,
-.calen-years.active,
-.calen-time.active {
+.calendar .calendar-months.active,
+.calendar .calendar-years.active,
+.calendar .calendar-time.active {
     display: block;
 }
-.calen-months span,
-.calen-years span,
-.calen-time span {
+.calendar .calendar-months span,
+.calendar .calendar-years span,
+.calendar .calendar-time span {
     float: left;
     width: 33.3333%;
     padding: 11px 0;
@@ -249,14 +253,14 @@
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
-.calen-time span {
+.calendar .calendar-time span {
     width: 25%;
     padding: 5px 0;
     height: 35px;
 }
-.calen-months a,
-.calen-years a,
-.calen-time a {
+.calendar .calendar-months a,
+.calendar .calendar-years a,
+.calendar .calendar-time a {
     display: inline-block;
     width: 80%;
     font-size: 1.6em;
@@ -265,30 +269,30 @@
     letter-spacing: 2px;
     border-radius: 4px;
 }
-.calen-time a {
+.calendar .calendar-time a {
     line-height: 25px;
     font-size: 1.45em;
 }
-.calen-months a:active,
-.calen-years a:active,
-.calen-time a:active {
+.calendar .calendar-months a:active,
+.calendar .calendar-years a:active,
+.calendar .calendar-time a:active {
     background-color: #26a1a4;
     color: #fff;
 }
-.calen-months a.active,
-.calen-years a.active {
+.calendar .calendar-months a.active,
+.calendar .calendar-years a.active {
     background-color: #39b5b8;
     color: #fff;
 }
-.calen-time .expire.pasted {
+.calendar .calendar-time .expire.pasted {
     color: #ccc;
 }
-.calen-time .expire.pasted:active,
-.calen-list .expire.pasted:active,
-.calen-list .pasted.shield:active {
+.calendar .calendar-time .expire.pasted:active,
+.calendar .calendar-list .expire.pasted:active,
+.calendar .calendar-list .pasted.shield:active {
     background: none;
 }
-.calen-years.active {
+.calendar .calendar-years.active {
     display: -webkit-box;
     display: box;
     -webkit-transition: .4s;
