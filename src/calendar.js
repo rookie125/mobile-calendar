@@ -50,22 +50,22 @@
 
     // 初始化
     Calendar.prototype.init = function(){
-        var _this = this;
+        var $this = this;
 
-        var aCalendars = getObj(document, '.calendars');
+        var aCalendars = getElement(document, '.calendars');
         if(!aCalendars.length)return;
 
         document.body.appendChild(oCalenWrap);
         oCalenWrap.appendChild(oCalenMask);
         oCalenWrap.appendChild(oCalen);
-        calenTitle = getObj(oCalen, '.calendar-title');
+        calenTitle = getElement(oCalen, '.calendar-title');
 
 
         // 创建头部
         this.createHeader(function(){
 
             // 创建星期标题头
-            _this.createWeek();
+            $this.createWeek();
 
             oCalen.appendChild(calendarList);
             
@@ -73,10 +73,10 @@
             sildeSwitch(calendarList, function(obj, dir){
                 dir > 0 ? mNow-- : mNow++;
 
-                _this.startJSON.prev.m = mNow - 1;
-                _this.startJSON.now.m = mNow;
-                _this.startJSON.next.m = mNow + 1;
-                _this.transitions(obj, dir);
+                $this.startJSON.prev.m = mNow - 1;
+                $this.startJSON.now.m = mNow;
+                $this.startJSON.next.m = mNow + 1;
+                $this.transitions(obj, dir);
             })
 
             // 显示/隐藏 月/年 份选择
@@ -140,7 +140,7 @@
                     for(var x = 0 ; x < months.length ; x++)toolClass(months[x], 'active', 'remove');
 
                     mNow += attr(this, 'data-value') - attr(monthTitle, 'data-value');
-                    _this.selectDate(this, selectMonthBox, "m", mNow);
+                    $this.selectDate(this, selectMonthBox, "m", mNow);
                 }
             }
         });
@@ -156,58 +156,58 @@
                     end = Number(attr(this, 'end')) || 2020;
 
                 past = !(attr(this, 'past') == null);
-                _this.hours = !(attr(this, 'hours') == null);
-                _this.hoursPast = !(attr(this, 'hours-past') == null);
+                $this.hours = !(attr(this, 'hours') == null);
+                $this.hoursPast = !(attr(this, 'hours-past') == null);
 
-                _this.shield = getDate(attr(this, 'shield') || '');
-                _this.startDate = getDate(attr(this, 'start-date') || '');
+                $this.shield = getDate(attr(this, 'shield') || '');
+                $this.startDate = getDate(attr(this, 'start-date') || '');
                 var prev,now,next, oDate = new Date();
 
-                if(_this.startDate instanceof Array && _this.startDate.length){
-                    var startDate = _this.startDate[0];
+                if($this.startDate instanceof Array && $this.startDate.length){
+                    var startDate = $this.startDate[0];
 
                     yNow = startDate.y - oDate.getFullYear();
                     mNow = startDate.m - (oDate.getMonth() + 1);
 
-                    for(var a in startDate)_this.fixDate[a] = startDate[a];
+                    for(var a in startDate)$this.fixDate[a] = startDate[a];
 
                     prev = { y : yNow, m : mNow - 1, d : startDate.d };
                     now  = { y : yNow, m : mNow, d : startDate.d };
                     next = { y : yNow, m : mNow + 1, d : startDate.d };
 
-                    _this.startJSON = {"prev" : prev, "now" : now, "next" : next};
+                    $this.startJSON = {"prev" : prev, "now" : now, "next" : next};
                 }
                 else {
-                    _this.fixDate.y = oDate.getFullYear();
-                    _this.fixDate.m = oDate.getMonth() + 1;
-                    _this.fixDate.d = 0;
+                    $this.fixDate.y = oDate.getFullYear();
+                    $this.fixDate.m = oDate.getMonth() + 1;
+                    $this.fixDate.d = 0;
                 }
 
-                if(_this.focusObj != this){
+                if($this.focusObj != this){
 
-                    if(!_this.startDate instanceof Array || !_this.startDate){
+                    if(!$this.startDate instanceof Array || !$this.startDate){
                         mNow = 0 ;
                         yNow = 0;
 
-                        _this.startJSON.prev = { y : yNow, m : mNow - 1 };
-                        _this.startJSON.now = { y : yNow, m : mNow };
-                        _this.startJSON.next = { y : yNow, m : mNow + 1 };
+                        $this.startJSON.prev = { y : yNow, m : mNow - 1 };
+                        $this.startJSON.now = { y : yNow, m : mNow };
+                        $this.startJSON.next = { y : yNow, m : mNow + 1 };
                     }
                     
                     // 创建日历对象列表
-                    _this.appendList(_this.startJSON, function(){
-                        _this.addEvent();
+                    $this.appendList($this.startJSON, function(){
+                        $this.addEvent();
                     });
                     
                     // 年
-                    _this.createDate({"start" : start, "end" : end, "type" : 'year'}, function(years){
+                    $this.createDate({"start" : start, "end" : end, "type" : 'year'}, function(years){
                         for(var k = 0 ; k < years.length ; k++){
 
                             years[k].onclick = function(){
                                 for(var x = 0 ; x < years.length ; x++)toolClass(years[x], 'active', 'remove');
 
                                 yNow += attr(this, 'data-value') - attr(yearTitle, 'data-value');
-                                _this.selectDate(this, selectYearBox, "y", yNow);
+                                $this.selectDate(this, selectYearBox, "y", yNow);
                             }
                         }
 
@@ -236,7 +236,7 @@
                 }
 
                 toolClass(oCalenWrap, 'active');
-                _this.focusObj = this;
+                $this.focusObj = this;
             }
         }
         oCalen.onclick = function(ev){
@@ -254,7 +254,7 @@
     Calendar.prototype.createCalenList = function(data, setTitle){
         var oList = document.createElement('div'),
             created = 0,
-            _this = this;
+            $this = this;
 
         data = data || {};
         data.m = data.m || 0;
@@ -307,7 +307,7 @@
                     "href" : 'javascript:;'
                 }, lastMonths[i]);
 
-            if(lastMonths[i] == tDay && data.m == 1 && !data.y && !data.d || !data.y && Number(_this.fixDate.m) + 1 == tMonth && _this.fixDate.d == lastMonths[i]){
+            if(lastMonths[i] == tDay && data.m == 1 && !data.y && !data.d || !data.y && Number($this.fixDate.m) + 1 == tMonth && $this.fixDate.d == lastMonths[i]){
                 toolClass(oNum, 'today');
             }
 
@@ -341,22 +341,22 @@
                 case 0: case 1: oNum.className = 'weekend'; break;
             }
 
-            if(!data.m && !data.y || !data.y && _this.fixDate.m == tMonth){
-                if((_this.fixDate.d == n && _this.fixDate.m == tMonth) || (!_this.fixDate.d && n == tDay)){
+            if(!data.m && !data.y || !data.y && $this.fixDate.m == tMonth){
+                if(($this.fixDate.d == n && $this.fixDate.m == tMonth) || (!$this.fixDate.d && n == tDay)){
 
                     oNum.className = oNum.className + ' today';
                 }
-                else if((past || _this.hoursPast) && n < tDay){
+                else if((past || $this.hoursPast) && n < tDay){
                     oNum.className = oNum.className + ' expire pasted';
                 }
             }
-            else if((past || _this.hoursPast) && data.m < 0 && data.y <= 0){
+            else if((past || $this.hoursPast) && data.m < 0 && data.y <= 0){
                 oNum.className = ' expire pasted';
             }
 
             // 设置是否小于用户定义的开始日期
-            if(tYear <= _this.fixDate.y && tMonth <= _this.fixDate.m && n < data.d || tYear <= _this.fixDate.y && tMonth < _this.fixDate.m){
-                if(_this.startDate)toolClass(oNum, 'expire pasted');
+            if(tYear <= $this.fixDate.y && tMonth <= $this.fixDate.m && n < data.d || tYear <= $this.fixDate.y && tMonth < $this.fixDate.m){
+                if($this.startDate)toolClass(oNum, 'expire pasted');
             }
 
             // 设置禁用日期
@@ -378,7 +378,7 @@
                     "href" : 'javascript:;'
                     }, n);
 
-            if(n == tDay && data.m == -1 && !data.y && !data.d || !data.y && _this.fixDate.m - 1 == tMonth && _this.fixDate.d == n){
+            if(n == tDay && data.m == -1 && !data.y && !data.d || !data.y && $this.fixDate.m - 1 == tMonth && $this.fixDate.d == n){
                 toolClass(oNum, 'today');
             }
 
@@ -391,14 +391,14 @@
 
         // 设置禁用日期
         function setShiled(iyear, imonth, idate){
-            if(!_this.shield)return false;
+            if(!$this.shield)return false;
 
-            for(var k = 0 ; k < _this.shield.length ; k++){
-                _this.shield[k].y = _this.shield[k].y || data.getFullYear();
-                _this.shield[k].m = _this.shield[k].m || data.getMonth() + 1;
-                _this.shield[k].d = _this.shield[k].d || data.getDate();
+            for(var k = 0 ; k < $this.shield.length ; k++){
+                $this.shield[k].y = $this.shield[k].y || data.getFullYear();
+                $this.shield[k].m = $this.shield[k].m || data.getMonth() + 1;
+                $this.shield[k].d = $this.shield[k].d || data.getDate();
 
-                if(iyear == _this.shield[k].y && imonth == _this.shield[k].m && idate == _this.shield[k].d)return true;
+                if(iyear == $this.shield[k].y && imonth == $this.shield[k].m && idate == $this.shield[k].d)return true;
             }
             return false;
         }
@@ -496,12 +496,12 @@
      * @return {[type]} [description]
      */
     Calendar.prototype.createTime = function(obj, date, today, past){
-        var oTime = getObj(oCalen, '.calendar-time'),
+        var oTime = getElement(oCalen, '.calendar-time'),
             child = [],
             oDate = new Date(),
             day = oDate.getDate(),
             hours = oDate.getHours(),
-            _this = this;
+            $this = this;
 
         if(!oTime.length){
             oTime = create('div', {"class" : 'calendar-time'});
@@ -521,7 +521,7 @@
         }
         else {
             oTime = oTime[0];
-            var arr = getObj(oTime, 'a');
+            var arr = getElement(oTime, 'a');
 
             for(var i = 0 ; i < arr.length ; i++){
                 child.push({"obj" : arr[i], "time" : parseInt(attr(arr[i], 'data-time'), 10)});
@@ -532,7 +532,7 @@
 
         for(var i = 0 ; i < child.length ; i++){
 
-            if(_this.hoursPast && ((mNow < 0 && yNow <= 0) || (today == day &&  child[i].time <= hours) || (mNow <= 0 && yNow <= 0 && today < day))){
+            if($this.hoursPast && ((mNow < 0 && yNow <= 0) || (today == day &&  child[i].time <= hours) || (mNow <= 0 && yNow <= 0 && today < day))){
                 toolClass(child[i].obj, 'expire pasted');
                 child[i].obj.active = false;
             } else {
@@ -553,7 +553,7 @@
                             obj.innerHTML = val;
                         }
                         hideCalen();
-                        _this.changes();
+                        $this.changes();
                     }
                     toolClass(oTime, 'active', 'remove');
                 }
@@ -570,7 +570,7 @@
     Calendar.prototype.createHeader = function(cb){
         calenTitles = calenTitles || [];
 
-        var _this = this;
+        var $this = this;
         var header = create('div', {"class" : 'calendar-header'});
 
         var year = create('div', {"class" : 'calendar-year'}),
@@ -601,10 +601,10 @@
         yearTitle = calenYearTxt;
 
         // 按钮切换上下月/年
-        prevMonth.onclick = function(){ _this.switchDate(-1); }
-        nextMonth.onclick = function(){ _this.switchDate(1); }
-        prevYear.onclick = function(){ _this.switchDate(-1, 'year'); }
-        nextYear.onclick = function(){ _this.switchDate(1, 'year'); }
+        prevMonth.onclick = function(){ $this.switchDate(-1); }
+        nextMonth.onclick = function(){ $this.switchDate(1); }
+        prevYear.onclick = function(){ $this.switchDate(-1, 'year'); }
+        nextYear.onclick = function(){ $this.switchDate(1, 'year'); }
 
         if(oCalen.children.length){
             oCalen.insertBefore(header, oCalen.children[0]);
@@ -666,39 +666,39 @@
      * 设置日历事件
      */
     Calendar.prototype.addEvent = function(){
-        var _this = this;
+        var $this = this;
         var aCalenSet = calendarList.getElementsByTagName('a');
 
         for(var i = 0 ; i < aCalenSet.length ; i++){
             aCalenSet[i].onclick = function(){
 
                 if(toolClass(this, 'prev-to-month', 'has')){
-                    _this.switchDate(-1);
+                    $this.switchDate(-1);
                 }
                 else if(toolClass(this, 'next-to-month', 'has')){
-                    _this.switchDate(1);
+                    $this.switchDate(1);
                 }
                 else if(!toolClass(this, 'pasted', 'has') && !toolClass(this, 'shield', 'has')){
 
                     var date = attr(this, 'data-calen'), today = this.innerHTML;
-                        date = format(date, (attr(_this.focusObj, 'format') || false));
+                        date = format(date, (attr($this.focusObj, 'format') || false));
 
-                    if(_this.hours){
-                        _this.createTime(_this.focusObj, date, today, past);
+                    if($this.hours){
+                        $this.createTime($this.focusObj, date, today, past);
                     }
                     else {
-                        if(_this.focusObj && typeof _this.focusObj.value == 'undefined'){
-                            _this.focusObj.innerHTML = date;
+                        if($this.focusObj && typeof $this.focusObj.value == 'undefined'){
+                            $this.focusObj.innerHTML = date;
                         }
-                        else if(_this.focusObj) {
-                            var type = typeof _this.focusObj.value;
+                        else if($this.focusObj) {
+                            var type = typeof $this.focusObj.value;
                             if(type === 'string' || type === 'number'){
-                                if(_this.focusObj.oldValue != date){
+                                if($this.focusObj.oldValue != date){
 
-                                    _this.focusObj.value = date;
-                                    _this.focusObj.oldValue = date;
+                                    $this.focusObj.value = date;
+                                    $this.focusObj.oldValue = date;
 
-                                    _this.changes();
+                                    $this.changes();
                                 }
                             }
                         }
@@ -716,21 +716,21 @@
      * @return {[type]}      [description]
      */
     Calendar.prototype.switchDate = function(dir, type){
-        var _this = this;
+        var $this = this;
         type = type || 'month';
 
         switch(type){
             case 'month':
                 dir > 0 ? mNow++ : mNow-- ;
 
-                _this.startJSON.prev.m = mNow - 1;
-                _this.startJSON.now.m = mNow;
-                _this.startJSON.next.m = mNow + 1;
+                $this.startJSON.prev.m = mNow - 1;
+                $this.startJSON.now.m = mNow;
+                $this.startJSON.next.m = mNow + 1;
 
-                _this.transitions(calendarList, dir > 0 ? -1 :1);
+                $this.transitions(calendarList, dir > 0 ? -1 :1);
                 break;
             case 'year':
-                _this.appendList({
+                $this.appendList({
                     prev : {
                         m : mNow,
                         y : yNow - 1
@@ -741,10 +741,10 @@
                     }
                 }, function(){
                     dir > 0 ? yNow++ : yNow-- ;
-                    _this.startJSON.prev.y = yNow;
-                    _this.startJSON.now.y = yNow;
-                    _this.startJSON.next.y = yNow;
-                    _this.transitions(calendarList, dir > 0 ? -1 : 1);
+                    $this.startJSON.prev.y = yNow;
+                    $this.startJSON.now.y = yNow;
+                    $this.startJSON.next.y = yNow;
+                    $this.transitions(calendarList, dir > 0 ? -1 : 1);
                 });
                 break;
         }
@@ -756,7 +756,7 @@
      * @param  {[type]} dir [上个月还是下个月]
      */
     Calendar.prototype.transitions = function(obj, dir){
-        var _this = this;
+        var $this = this;
 
         if(dir > 0){
             toolClass(obj, 'silde prev-to');
@@ -770,9 +770,9 @@
         }, 500)
 
         function end(){
-            _this.appendList(_this.startJSON, function(){
+            $this.appendList($this.startJSON, function(){
                 toolClass(obj, 'silde prev-to next-to', 'remove');
-                _this.addEvent();
+                $this.addEvent();
                 silde = false;
             })
         }
@@ -780,14 +780,14 @@
 
     /**/
     Calendar.prototype.selectDate = function(obj, obj2, attr, val){
-        var _this = this;
+        var $this = this;
 
         this.startJSON.prev[attr] = (attr == 'm' ? val - 1 : val);
         this.startJSON.now[attr] = val;
         this.startJSON.next[attr] = (attr == 'm' ? val + 1 : val);
 
         this.appendList(this.startJSON, function(){
-            _this.addEvent();
+            $this.addEvent();
         });
 
         toolClass(obj, 'active');
@@ -826,7 +826,7 @@
             var needW = parseInt(document.documentElement.clientWidth / 5, 10);
             var dir;
 
-            var _this = this;
+            var $this = this;
 
             function move(ev){
                 var oEv = ev.targetTouches ? ev.targetTouches[0] : (ev || event);
@@ -836,7 +836,7 @@
                 if(Math.abs(dir) >= needW){
                     silde = true;
 
-                    callBack && callBack(_this, dir);
+                    callBack && callBack($this, dir);
                 }
 
                 oEv.preventDefault && oEv.preventDefault();
@@ -896,12 +896,19 @@
      * @param  {[type]} parent [description]
      * @param  {[type]} str    [type]
      */
-    function getObj(parent, str){
-        var type = str.charAt(0), result;
-        switch(type){
-            case '#': result = parent.getElementById(str.substring(1)); break;
-            case '.': result = parent.getElementsByClassName(str.substring(1)); break;
-            default: result = parent.getElementsByTagName(str); break;
+    function getElement(parent, str){
+        var result;
+
+        switch(str.charAt(0)){
+            case '#':
+                result = parent.getElementById(str.substring(1));
+                break;
+            case '.':
+                result = parent.getElementsByClassName(str.substring(1));
+                break;
+            default: 
+                result = parent.getElementsByTagName(str);
+                break;
         }
 
         return result;
@@ -919,14 +926,14 @@
         attr = attr || {};
         html = html || '';
 
-        var tag = document.createElement(tagname);
+        var element = document.createElement(tagname);
 
         for(var i in attr){
-            tag.setAttribute(i, attr[i]);
+            element.setAttribute(i, attr[i]);
         }
 
-        tag.innerHTML = html;
-        return tag;
+        element.innerHTML = html;
+        return element;
     }
     
     /**
