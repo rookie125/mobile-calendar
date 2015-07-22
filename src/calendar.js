@@ -831,13 +831,6 @@
             function move(ev){
                 var oEv = ev.targetTouches ? ev.targetTouches[0] : (ev || event);
                 dir = oEv.pageX - disX;
-                if(silde)return false;
-
-                if(Math.abs(dir) >= needW){
-                    silde = true;
-
-                    callBack && callBack($this, dir);
-                }
 
                 oEv.preventDefault && oEv.preventDefault();
                 return false;
@@ -849,6 +842,14 @@
 
                 this.removeEventListener('touchmove', move, false);
                 this.removeEventListener('touchend', end, false);
+
+                if(silde)return false;
+
+                if(Math.abs(dir) >= needW){
+                    silde = true;
+
+                    callBack && callBack($this, dir);
+                }
             }
 
             this.onmousemove = move;
