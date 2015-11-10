@@ -105,6 +105,7 @@
 .calendar .calendar-list {
     position: relative;
     display: -webkit-box;
+    display: -moz-box;
     display: box;
     width: 300%;
     height: 210px;
