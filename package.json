@@ -11,12 +11,11 @@
     "del": "^1.1.0",
     "gulp-rename": "^1.2.0",
     "gulp-uglify": "^1.0.2",
-    "gulp-uglifycss": "^1.0.4"
+    "gulp-uglifycss": "^1.0.4",
+    "run-sequence": "^1.1.5"
   },
-  "scripts": {
-  },
-  "repository": {
-  },
+  "scripts": {},
+  "repository": {},
   "keywords": [],
   "author": "rookie"
 }

@@ -1,33 +1,31 @@
 var gulp = require('gulp');
+var del = require('del');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var uglifycss = require('gulp-uglifycss');
+var runSequence = require('run-sequence');
 
-// 处理JS
-gulp.task('scripts', function() {
-    return gulp.src('src/calendar.js')
-        .pipe(uglify())    //压缩
-        .pipe(rename('calendar.min.js'))
-        .pipe(gulp.dest('src/'));  //输出
+// clear old file
+gulp.task('clean', function() {
+  del.sync(['dist/*']);
 });
 
-// 处理CSS
+// scripts
+gulp.task('scripts', function() {
+    return gulp.src('src/assets/js/calendar.js')
+        .pipe(uglify())    //压缩
+        .pipe(rename('calendar.min.js'))
+        .pipe(gulp.dest('dist/'));  //输出
+});
+
+// CSS
 gulp.task('csss', function() {
-    return gulp.src('src/calendar.css')
+    return gulp.src('src/assets/css/calendar.css')
         .pipe(uglifycss())
         .pipe(rename('calendar.min.css'))
-        .pipe(gulp.dest('src/'));
+        .pipe(gulp.dest('dist/'));
 });
 
 gulp.task('default', function() {
-    gulp.run('scripts', 'csss');
-
-    // 监听文件变化
-    gulp.watch('src/calendar.js', function(){
-        gulp.run('scripts');
-    });
-
-    gulp.watch('src/calendar.css', function(){
-        gulp.run('csss');
-    });
+    runSequence('clean', ['scripts', 'csss']);
 });
