@@ -12,7 +12,7 @@ gulp.task('clean', function() {
 
 // scripts
 gulp.task('scripts', function() {
-    return gulp.src('src/assets/js/calendar.js')
+    return gulp.src('src/calendar.js')
         .pipe(uglify())    //压缩
         .pipe(rename('calendar.min.js'))
         .pipe(gulp.dest('dist/'));  //输出
@@ -20,7 +20,7 @@ gulp.task('scripts', function() {
 
 // CSS
 gulp.task('csss', function() {
-    return gulp.src('src/assets/css/calendar.css')
+    return gulp.src('src/calendar.css')
         .pipe(uglifycss())
         .pipe(rename('calendar.min.css'))
         .pipe(gulp.dest('dist/'));

@@ -1,13 +1,12 @@
 {
   "name": "calendar",
   "version": "0.1.0",
-  "description": "calendar",
+  "description": "mobile-calendar",
   "main": "gulpfile.js",
-  "dependencies": {
-    "gulp": "^3.8.10",
-    "gulp-rev": "^2.0.1"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "gulp": "^3.8.10",
+    "gulp-rev": "^2.0.1",
     "del": "^1.1.0",
     "gulp-rename": "^1.2.0",
     "gulp-uglify": "^1.0.2",
@@ -16,6 +15,11 @@
   },
   "scripts": {},
   "repository": {},
-  "keywords": [],
-  "author": "rookie"
+  "keywords": [
+    "mobile",
+    "calendar",
+    "mobile-calendar",
+    "日历"
+  ],
+  "author": "fawzi.wu"
 }
