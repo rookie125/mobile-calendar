@@ -11,9 +11,9 @@ npm install --save mobile-calendar
 ### 引入方式
 
 ```html
-<link rel="stylesheet" href="src/calendar.min.css">
+<link rel="stylesheet" href="/dist/calendar.min.css">
 
-<script src="src/calendar.js"></script>
+<script src="/dist/calendar.min.js"></script>
 
 <input type="text" class="calendars" />
 ```   
