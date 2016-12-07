@@ -1,14 +1,14 @@
 ## mobile-calendar 
 简易版移动端版日期插件，没第三方库依赖
 
-### 安装与使用
+### 安装
 
 ```bash
 # 安装 mobile-calendar
 npm install --save mobile-calendar
 ```
 
-### 引入方式
+### 引入方式和使用
 
 ```html
 <link rel="stylesheet" href="/dist/calendar.min.css">
