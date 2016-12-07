@@ -1,9 +1,36 @@
-简单说明
--------
+## mobile-calendar 
+简易版移动端版日期插件，没第三方库依赖
 
-可定义是否可以选择过期日期   
-日历列表、年份选择支持左右滑动切换月份、年份。   
+### 安装与使用
 
+```bash
+# 安装 mobile-calendar
+npm install --save mobile-calendar
+```
+
+### 引入方式
+
+```html
+<link rel="stylesheet" href="src/calendar.min.css">
+
+<script src="src/calendar.js"></script>
+
+<input type="text" class="calendars" />
+```   
+
+### API
+通过在元素上添加属性的方式
+
+* start 开始年份 String defalut:1915
+* end   结束年份 String defalut:2030
+* start-date 起始日期 String defalut:当前日期
+* format 显示的格式 String defalut:'yy/mm/dd' 只支持 yy/mm/dd 或 yy-mm-dd
+* shield 指定禁用日期 Array defalut:undefined 例: shield="[2015/3/8, 2015/3/9]"
+* past  不可选择过去日期 defalut:false 只需要设置属性即可，不需要值
+* hours 可以选择时间 defalut:false 只需要设置属性即可，不需要值
+   * hours-past 不可选择过去时间 defalut:false 只需要设置属性即可，不需要值
+
+### 图片
 
 选择列表  
 ![选择列表](src/assets/images/4.png '选择列表')
@@ -19,69 +46,3 @@
 
 左右滑动切换年份列表    
 ![左右滑动切换年份列表](src/assets/images/2-1.png '左右滑动切换年份列表')
-
-
-## 使用方法
-
-引入该项目中的 CSS样式和JS文件
-
-	<link rel="stylesheet" href="src/calendar.min.css">
-
-引入JS文件方法有两种：  
- 
->方法一：模块化引入JS文件
-
-	<script src="xx/sea.js"></script>
-	<script>
-	    seajs.use('./src/calendar');
-	</script>
-
->方法二：普通引入JS文件
-
-	<script src="src/calendar.js"></script>
-
-在<input /\>标签上定义class属性值为 "calendars"
-
-	<input type="text" class="calendars" />
-
-
-## 可选参数定义说明
-
-参数直接定义在标签上面
-
-定义年份列表中开始年份： <code>**start="2008"**</code>，默认开始为"1915"年
-
-	<input class="calendars" type="text" start="2008" />
-
-定义年份列表中结束年份： <code>**end="2030"**</code>，默认为"2020"年
-	
-	<input class="calendars" type="text" end="2030" />
-
-定义可选的起始日期： <code>**start-date="2015/3/6"**</code>，默认为当前日期
-
-	<input class="calendars" type="text" start-date="2015/3/6" />
-
-定义是否不可选过期日期： <code>**past**</code>, 默认可选过期的日期
-	
-	<input class="calendars" type="text" past />
-
-
-定义是否可选时间： <code>**hours**</code>, 默认不可选时间
-	
-	<input class="calendars" type="text" hours />
-
-定义是否不可选过期时间： <code>**hours-past**</code>，默认可选过期时间    
-该属性只有当你定义了<code>**hours**</code> 属性才会生效
-
-	<input class="calendars" type="text" hours hours-past />
-
-定义日期的显示格式： <code>**format**</code>, 默认为 <code>**"yy/mm/dd"**</code> , 暂时只支持 斜杠 <code>/</code> 和 横杠 <code>-</code> 作为分割符   
-<code> yy:年</code> <code>mm:月</code> <code>dd:日</code>
-	 
-	<input class="calendars" type="text" format="yy-mm-dd" />
-
-定义指定禁用的日期属性： <code>**shield="[2015/3/8, 2015/3/9]"**</code>
-	
-	<input class="calendars" type="text" shield="[2015/3/8, 2015/3/9]" />
-
-
