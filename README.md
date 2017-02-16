@@ -21,8 +21,8 @@ npm install --save mobile-calendar
 ### API
 通过在元素上添加属性的方式
 
-* start 开始年份 String defalut:1915
-* end   结束年份 String defalut:2030
+* start-year 开始年份 String defalut:1915
+* end-year   结束年份 String defalut:2050
 * start-date 起始日期 String defalut:当前日期
 * format 显示的格式 String defalut:'yy/mm/dd' 只支持 yy/mm/dd 或 yy-mm-dd
 * shield 指定禁用日期 Array defalut:undefined 例: shield="[2015/3/8, 2015/3/9]"

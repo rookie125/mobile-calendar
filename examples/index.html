@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="yes" name="apple-touch-fullscreen" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0;" name="viewport" />
+    <link rel="stylesheet" href="../src/calendar.css">
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        
+        .wrap {
+            font-size: 12px;
+            padding: 10px;
+        }
+        
+        .wrap .item {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #fff;
+        }
+        
+        p {
+            margin: 0;
+            padding-bottom: 5px;
+        }
+        
+        h4 {
+            padding: 5px 10px;
+            margin: -10px -10px 0;
+            font-size: 1rem;
+            line-height: 24px;
+            font-weight: normal;
+            border-bottom: 1px solid #eee;
+        }
+        
+        input {
+            margin-top: 10px;
+            padding: 5px 10px;
+            border: 1px #eee solid;
+            width: 100%;
+            line-height: 18px;
+            height: 28px;
+            font-size: 14px;
+            box-sizing: border-box;
+            background-color: #f9f9f9;
+        }
+    </style>
+    <title>calendar</title>
+</head>
+
+<body>
+
+    <div class="wrap">
+        <div class="item">
+            <h4>默认：</h4>
+            <input type="text" class="calendars" placeholder="选择日期"><br>
+        </div>
+
+
+        <div class="item">
+            <h4>过去日期不可选 past：</h4>
+            <input type="text" class="calendars" past placeholder="选择日期"><br>
+        </div>
+
+
+        <div class="item">
+            <h4>选时间 hours：</h4>
+            <input type="text" class="calendars" hours placeholder="选择日期时间"><br>
+        </div>
+
+
+        <div class="item">
+            <h4>过期的时间不可选，包括日期 hours、hours-past：</h4>
+            <input type="text" class="calendars" hours hours-past placeholder="选择日期时间"><br>
+        </div>
+
+
+        <div class="item">
+            <h4>指定开始日期 start-date：
+                <p>start-date="2015/5/6"</p>
+            </h4>
+            <input type="text" class="calendars" start-date="2015/5/6" placeholder="选择日期"><br>
+        </div>
+
+
+        <div class="item">
+            <h4>指定禁用日期 shield：
+                <p>shield="['2015/3/10', '2015/4/10', '2015/4/20']"</p>
+            </h4>
+            <input type="text" class="calendars" shield="['2015/3/10', '2015/4/10', '2015/4/20']" placeholder="选择日期"><br>
+        </div>
+
+
+        <div class="item">
+            <h4>定义日期的显示格式 format：
+                <p>format="dd/MM/yyyy"</p>
+            </h4>
+            <input type="text" class="calendars" format="dd/MM/yyyy" placeholder="选择日期">
+        </div>
+    </div>
+
+
+    <!-- 模块化引入写法 -->
+    <script src="../lib/sea.js"></script>
+    <script>
+        seajs.use('../src/calendar');
+    </script>
+
+    <!-- 普通引入写法 -->
+    <!-- <script src="../src/calendar.js"></script> -->
+</body>
+
+</html>
