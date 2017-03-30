@@ -741,7 +741,7 @@
     Calendar.prototype.addEvent = function() {
         var self = this;
 
-        calendarList.querySelectorAll('a').forEach(function(node) {
+        Array.prototype.forEach.call(calendarList.querySelectorAll('a'), function (node) {
             node.onclick = function() {
                 var classList = this.classList;
 
@@ -874,7 +874,7 @@
         element.addEventListener('touchstart', start, false);
 
         function start(evt) {
-            var oEv = evt.targetTouches ? ev.targetTouches[0] : (evt || event);
+            var oEv = evt.targetTouches ? evt.targetTouches[0] : (evt || event);
             var disX = oEv.pageX;
             var needW = parseInt(document.documentElement.clientWidth / 5, 10);
             var dir;
@@ -884,7 +884,7 @@
             function move(evt) {
                 if (sildeing) return false;
 
-                var oEv = evt.targetTouches ? ev.targetTouches[0] : (evt || event);
+                var oEv = evt.targetTouches ? evt.targetTouches[0] : (evt || event);
                 dir = oEv.pageX - disX;
 
                 if (Math.abs(dir) >= needW) {
