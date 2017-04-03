@@ -155,6 +155,10 @@
 .calendar .calendar-list .expire.pasted {
     color: #B5B5B5;
 }
+.calendar .calendar-list .expire.pasted.today {
+    color: #e7e7e7;
+    background: rgba(47, 202, 96, 0.38);
+}
 .calendar .calendar-list .expire:active {
     color: #B5B5B5;
     background-color: #eee;

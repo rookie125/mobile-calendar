@@ -24,6 +24,8 @@ npm install --save mobile-calendar
 * start-year 开始年份 String defalut:1915
 * end-year   结束年份 String defalut:2050
 * start-date 起始日期 String defalut:当前日期
+* min-date 起始日期 String defalut:null
+* max-date 起始日期 String defalut:null
 * format 显示的格式 String defalut:'yy/mm/dd' 只支持 yy/mm/dd 或 yy-mm-dd
 * shield 指定禁用日期 Array defalut:undefined 例: shield="[2015/3/8, 2015/3/9]"
 * past  不可选择过去日期 defalut:false 只需要设置属性即可，不需要值

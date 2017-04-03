@@ -53,6 +53,8 @@
         this.hours = false;
         this.hoursPast = false;
         this.currentNode = null;
+        this.minDate = null,
+        this.maxDate = null,
         this.shield = '[]';
         this.startDate = '';
         this.startJSON = {};
@@ -154,121 +156,123 @@
         for (var i = 0; i < aCalendars.length; i++) {
 
             attribute(aCalendars[i], 'readonly', 'true');
-            aCalendars[i].addEventListener('focus',
-                function focus() {
-                    if (attribute(this, 'disabled') != null) return;
+            aCalendars[i].addEventListener('focus', function focus() {
+                if (attribute(this, 'disabled') != null) return;
 
-                    var start = Number(attribute(this, 'start-year')) || 1915;
-                    var end = Number(attribute(this, 'end-year')) || 2050;
+                var start = Number(attribute(this, 'start-year')) || 1915;
+                var end = Number(attribute(this, 'end-year')) || 2050;
 
-                    self.hours = !(attribute(this, 'hours') == null);
-                    self.hoursPast = !(attribute(this, 'hours-past') == null);
+                self.hours = !(attribute(this, 'hours') == null);
+                self.hoursPast = !(attribute(this, 'hours-past') == null);
 
-                    self.past = !(attribute(this, 'past') == null) || self.hoursPast;
+                self.past = !(attribute(this, 'past') == null) || self.hoursPast;
 
-                    self.shield = getDate(attribute(this, 'shield') || '');
-                    self.startDate = getDate(attribute(this, 'start-date') || '');
+                self.minDate = getDate(attribute(this, 'min-date') || '')[0];
+                self.maxDate = getDate(attribute(this, 'max-date') || '')[0];
 
-                    var prev, now, next, oDate = new Date();
+                self.shield = getDate(attribute(this, 'shield') || '');
+                self.startDate = getDate(attribute(this, 'start-date') || '');
 
-                    if (self.startDate instanceof Array && self.startDate.length) {
-                        var startDate = self.startDate[0];
+                var prev, now, next, oDate = new Date();
 
-                        relativeYear = startDate.y - oDate.getFullYear();
-                        relativeMonth = startDate.m - (oDate.getMonth() + 1);
+                if (self.startDate instanceof Array && self.startDate.length) {
+                    var startDate = self.startDate[0];
 
-                        for (var key in startDate) self.fixDate[key] = startDate[key];
+                    relativeYear = startDate.y - oDate.getFullYear();
+                    relativeMonth = startDate.m - (oDate.getMonth() + 1);
 
-                        prev = {
+                    for (var key in startDate) self.fixDate[key] = startDate[key];
+
+                    prev = {
+                        y: relativeYear,
+                        m: relativeMonth - 1,
+                        d: startDate.d
+                    };
+                    now = {
+                        y: relativeYear,
+                        m: relativeMonth,
+                        d: startDate.d
+                    };
+                    next = {
+                        y: relativeYear,
+                        m: relativeMonth + 1,
+                        d: startDate.d
+                    };
+
+                    self.startJSON = {
+                        prev: prev,
+                        now: now,
+                        next: next
+                    };
+                } else {
+                    self.fixDate.y = oDate.getFullYear();
+                    self.fixDate.m = oDate.getMonth() + 1;
+                    self.fixDate.d = 0;
+                }
+
+                if (self.currentNode != this) {
+
+                    if (!self.startDate instanceof Array || !self.startDate) {
+                        relativeYear = relativeMonth = 0;
+
+                        self.startJSON.prev = {
                             y: relativeYear,
-                            m: relativeMonth - 1,
-                            d: startDate.d
+                            m: relativeMonth - 1
                         };
-                        now = {
+                        self.startJSON.now = {
                             y: relativeYear,
-                            m: relativeMonth,
-                            d: startDate.d
+                            m: relativeMonth
                         };
-                        next = {
+                        self.startJSON.next = {
                             y: relativeYear,
-                            m: relativeMonth + 1,
-                            d: startDate.d
+                            m: relativeMonth + 1
                         };
-
-                        self.startJSON = {
-                            prev: prev,
-                            now: now,
-                            next: next
-                        };
-                    } else {
-                        self.fixDate.y = oDate.getFullYear();
-                        self.fixDate.m = oDate.getMonth() + 1;
-                        self.fixDate.d = 0;
                     }
 
-                    if (self.currentNode != this) {
+                    // 创建日历对象列表
+                    self.appendList(self.startJSON, self.addEvent.bind(self));
 
-                        if (!self.startDate instanceof Array || !self.startDate) {
-                            relativeYear = relativeMonth = 0;
+                    // 年
+                    self.createDate({
+                            start: start,
+                            end: end,
+                            type: 'year'
+                        },
+                        function(years) {
+                            for (var length = 0; length < years.length; length++) {
 
-                            self.startJSON.prev = {
-                                y: relativeYear,
-                                m: relativeMonth - 1
-                            };
-                            self.startJSON.now = {
-                                y: relativeYear,
-                                m: relativeMonth
-                            };
-                            self.startJSON.next = {
-                                y: relativeYear,
-                                m: relativeMonth + 1
-                            };
-                        }
+                                years[length].onclick = function() {
+                                    for (var x = 0; x < years.length; x++) years[x].classList.remove('active');
 
-                        // 创建日历对象列表
-                        self.appendList(self.startJSON, self.addEvent.bind(self));
-
-                        // 年
-                        self.createDate({
-                                start: start,
-                                end: end,
-                                type: 'year'
-                            },
-                            function(years) {
-                                for (var length = 0; length < years.length; length++) {
-
-                                    years[length].onclick = function() {
-                                        for (var x = 0; x < years.length; x++) years[x].classList.remove('active');
-
-                                        relativeYear += attribute(this, 'data-value') - attribute(yearTitle, 'data-value');
-                                        self.selectDate(this, selectYearBox, "y", relativeYear);
-                                    }
+                                    relativeYear += attribute(this, 'data-value') - attribute(yearTitle, 'data-value');
+                                    self.selectDate(this, selectYearBox, "y", relativeYear);
                                 }
+                            }
 
-                                sildeSwitch(selectYearBox,
-                                    function(obj, dir) {
-                                        selectYearBox.index = selectYearBox.index || 0;
-                                        var count = selectYearBox.children.length;
+                            sildeSwitch(selectYearBox,
+                                function(obj, dir) {
+                                    selectYearBox.index = selectYearBox.index || 0;
+                                    var count = selectYearBox.children.length;
 
-                                        if (dir > 0) {
-                                            selectYearBox.index++;
-                                            if (selectYearBox.index >= 0) selectYearBox.index = 0;
-                                        } else {
-                                            selectYearBox.index--;
-                                            if (selectYearBox.index <= -count) selectYearBox.index = -(count - 1);
-                                        }
+                                    if (dir > 0) {
+                                        selectYearBox.index++;
+                                        if (selectYearBox.index >= 0) selectYearBox.index = 0;
+                                    } else {
+                                        selectYearBox.index--;
+                                        if (selectYearBox.index <= -count) selectYearBox.index = -(count - 1);
+                                    }
 
-                                        var val = 'translate3D(' + (selectYearBox.index * (100 / count)) + '%, 0, 0)';
+                                    var val = 'translate3D(' + (selectYearBox.index * (100 / count)) + '%, 0, 0)';
 
-                                        selectYearBox.style.WebkitTransform = val;
-                                        selectYearBox.style.transform = val;
-                                    })
-                            });
-                    }
+                                    selectYearBox.style.WebkitTransform = val;
+                                    selectYearBox.style.transform = val;
+                                })
+                        });
+                }
 
-                    oCalenWrap.classList.add('active');
-                    self.currentNode = this;
-                });
+                oCalenWrap.classList.add('active');
+                self.currentNode = this;
+            });
         }
         oCalen.onclick = function(ev) {
             var oEv = ev.targetTouches ? ev.targetTouches[0] : (ev || event);
@@ -290,6 +294,8 @@
         var mixinYear = data.y || 0;
         var mixinMonth = data.m || 0;
         var mixinDay = data.d;
+        var minDate = this.minDate || {};
+        var maxDate = this.maxDate || {};
 
         var date = new Date();
 
@@ -355,6 +361,8 @@
         }
 
         var nowTime = getTime(currentYear, currentMonth, today);
+        var minDateTime = getTime(minDate.y, minDate.m, minDate.d);
+        var maxDateTime = getTime(maxDate.y, maxDate.m, maxDate.d);
 
         // 这当前月的日期列表
         for (var i = 0; i < dSun; i++) {
@@ -375,11 +383,23 @@
             }
 
             var time = getTime(mixinYear + currentYear, mixinMonth + currentMonth, day);
+            var contrastTime = getTime(currentYear, currentMonth, day)
 
             // 设置样式
-            if (self.past && time < nowTime) {
+            if (
+                self.past && time < nowTime ||
+                minDateTime && contrastTime < minDateTime ||
+                maxDateTime && contrastTime > maxDateTime
+            ) {
                 dayEle.classList.add('expire', 'pasted');
-            } else if (time === nowTime || self.fixDate.y === currentYear && self.fixDate.m === currentMonth && self.fixDate.d === day) {
+            }
+
+            if (
+                time === nowTime || 
+                self.fixDate.y === currentYear && 
+                self.fixDate.m === currentMonth && 
+                self.fixDate.d === day
+            ) {
                 dayEle.classList.add('today');
             }
 
@@ -919,6 +939,8 @@
      * 获取时间戳
      */
     function getTime(year, month, date) {
+        if (year === undefined || month === undefined || date === undefined) return null;
+
         return (new Date(year, month, date, 23, 59, 59)).getTime();
     }
 
@@ -995,7 +1017,7 @@
      * 通过字符串获取年月日
      */
     function getDate(str) {
-        if (!str) return;
+        if (!str) return [];
 
         var dateList = [];
 
