@@ -156,7 +156,11 @@
         for (var i = 0; i < aCalendars.length; i++) {
 
             attribute(aCalendars[i], 'readonly', 'true');
-            aCalendars[i].addEventListener('focus', function focus() {
+
+            aCalendars[i].removeEventListener('focus', focus, false);
+            aCalendars[i].addEventListener('focus', focus, false);
+
+            function focus() {
                 if (attribute(this, 'disabled') != null) return;
 
                 var start = Number(attribute(this, 'start-year')) || 1915;
@@ -272,7 +276,7 @@
 
                 oCalenWrap.classList.add('active');
                 self.currentNode = this;
-            });
+            }
         }
         oCalen.onclick = function(ev) {
             var oEv = ev.targetTouches ? ev.targetTouches[0] : (ev || event);
@@ -891,6 +895,7 @@
      */
     function sildeSwitch(element, callBack) {
         element.onmousedown = start;
+        element.removeEventListener('touchstart', start, false);
         element.addEventListener('touchstart', start, false);
 
         function start(evt) {
@@ -929,6 +934,9 @@
 
             this.onmousemove = move;
             this.onmouseup = end;
+
+            element.removeEventListener('touchmove', move, false);
+            element.removeEventListener('touchend', end, false);
 
             element.addEventListener('touchmove', move, false);
             element.addEventListener('touchend', end, false);
@@ -1060,6 +1068,8 @@
             new Calendar();
         },
         false);
+
+    window.Calendar = Calendar;
 
     return Calendar;
 }));
