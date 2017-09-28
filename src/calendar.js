@@ -1016,9 +1016,7 @@
             d: seats(dateNumber[2])
         };
 
-        return defaultFmat.split(/[^a-z]/i).map(function(mark) {
-            return dateHash[mark.charAt(0).toLocaleLowerCase()];
-        }).join(symbol);
+        return defaultFmat.replace(/yyyy/i,dateHash.y).replace(/mm/i,dateHash.m).replace(/dd/i,dateHash.d);
     }
 
     /**
